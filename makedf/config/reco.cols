@@ -1,0 +1,193 @@
+# Reco columns (data and MC), read from the MasterAnaDev tree.  See src/Columns.h for syntax.
+# Units: MeV, mm, rad.
+
+# --- event bookkeeping
+run              ev_run
+subrun           ev_subrun
+gate             ev_gate
+numi_pot         numi_pot
+batch_structure  batch_structure
+vtx_batch        reco_vertex_batch
+
+# --- vertex and event topology
+vtx              vtx[:4]
+has_vtx          has_interaction_vertex
+multiplicity     multiplicity
+dead             phys_n_dead_discr_pair_upstream_prim_track_proj
+nu_helicity      MasterAnaDev_nuHelicity
+n_anchored_long  n_anchored_long_trk_prongs
+n_anchored_short n_anchored_short_trk_prongs
+iso_prongs_count iso_prongs_count
+
+# --- muon
+minos_match      isMinosMatchTrack
+mu_lepE          MasterAnaDev_leptonE[:4]
+mu_P             MasterAnaDev_muon_P
+mu_E             MasterAnaDev_muon_E
+mu_theta_mad     MasterAnaDev_muon_theta
+mu_theta_up      MasterAnaDev_muon_theta_biasUp
+mu_theta_dn      MasterAnaDev_muon_theta_biasDown
+mu_qpqpe         MasterAnaDev_muon_qpqpe
+mu_thetaX        muon_thetaX
+mu_thetaY        muon_thetaY
+mu_theta         muon_theta
+mu_phi           muon_phi
+minos_p          MasterAnaDev_minos_trk_p
+minos_p_range    MasterAnaDev_minos_trk_p_range
+minos_p_curv     MasterAnaDev_minos_trk_p_curvature
+minos_qp         MasterAnaDev_minos_trk_qp
+minos_eqp        MasterAnaDev_minos_trk_eqp
+minos_eqp_qp     MasterAnaDev_minos_trk_eqp_qp
+minos_contained  MasterAnaDev_minos_trk_is_contained
+minos_ok         MasterAnaDev_minos_trk_is_ok
+minos_quality    MasterAnaDev_minos_trk_quality
+minos_used_range MasterAnaDev_minos_used_range
+minos_used_curv  MasterAnaDev_minos_used_curvature
+minos_end_x      MasterAnaDev_minos_trk_end_x
+minos_end_y      MasterAnaDev_minos_trk_end_y
+
+# --- tuple-level kinematics
+mad_E            MasterAnaDev_E
+mad_Q2_ccqe      MasterAnaDev_Q2_CCQE
+mad_Q2_inc       MasterAnaDev_Q2_Inclusive
+mad_W            MasterAnaDev_W
+
+# --- recoil / calorimetry variants
+recoil_summed    recoil_summed_energy[0]
+recoil_E         MasterAnaDev_recoil_E
+had_recoil       MasterAnaDev_hadron_recoil
+had_recoil_ccinc MasterAnaDev_hadron_recoil_CCInc
+had_recoil_def   MasterAnaDev_hadron_recoil_default
+had_recoil_2trk  MasterAnaDev_hadron_recoil_two_track
+blob_recoil      blob_recoil_E
+blob_recoil_trk  blob_recoil_E_tracker
+blob_recoil_ecal blob_recoil_E_ecal
+blob_ccqe_recoil blob_ccqe_recoil_E
+cl_trk_esum      cluster_trackerEsum
+cl_ecal_esum     cluster_ecalEsum
+cl_hcal_esum     cluster_hcalEsum
+vtx_blobs_E      vtx_blobs_energy
+rec_vtx100       recoil_energy_nonmuon_vtx100mm
+rec_vtx150       recoil_energy_nonmuon_vtx150mm
+rec_vtx200       recoil_energy_nonmuon_vtx200mm
+rec_vtx300       recoil_energy_nonmuon_vtx300mm
+rec_nonvtx0      recoil_energy_nonmuon_nonvtx0mm
+rec_nonvtx100    recoil_energy_nonmuon_nonvtx100mm
+rec_nonvtx150    recoil_energy_nonmuon_nonvtx150mm
+rec_nonvtx200    recoil_energy_nonmuon_nonvtx200mm
+rec_nonvtx300    recoil_energy_nonmuon_nonvtx300mm
+pr_passive_id    part_response_total_recoil_passive_id
+pr_passive_od    part_response_total_recoil_passive_od
+pr_all_id        part_response_total_recoil_passive_allNonMuonClusters_id
+pr_all_od        part_response_total_recoil_passive_allNonMuonClusters_od
+pr_all_tracker   part_response_total_recoil_passive_allNonMuonClusters_tracker
+pr_all_ecal      part_response_total_recoil_passive_allNonMuonClusters_ecal
+pr_all_hcal      part_response_total_recoil_passive_allNonMuonClusters_hcal
+pr_all_nucl      part_response_total_recoil_passive_allNonMuonClusters_nucl
+pr_o100_id       part_response_total_recoil_passive_allNonMuonClusters_outside100mm_id
+pr_o100_tracker  part_response_total_recoil_passive_allNonMuonClusters_outside100mm_tracker
+pr_isoblob_id    part_response_total_recoil_passive_isoBlobIDClusters_id
+
+# --- Michel electrons
+n_improved_michel improved_michel_match_vec_sz
+improved_nmichel improved_nmichel
+imich_vtype      improved_michel_vertex_type[:3]
+imich_dist       improved_michel_dist_vec[:3]
+imich_evis       improved_michel_evis_vec[:3]
+imich_tdiff      improved_michel_tdiff_vec[:3]
+n_fitted_michel  FittedMichel_michel_fitPass_sz
+
+# --- isolated blobs (pi0 photon candidates)
+n_nonvtx_iso_blobs     n_nonvtx_iso_blobs
+n_nonvtx_iso_blobs_all n_nonvtx_iso_blobs_all
+nonvtx_iso_blobs_E     nonvtx_iso_blobs_energy
+nonvtx_iso_blobs_E_all nonvtx_iso_blobs_energy_all
+n_isoblob_prong        nonvtx_iso_blobs_start_position_z_in_prong_sz
+isoblob_z              nonvtx_iso_blobs_start_position_z_in_prong[:5]
+isoblob_E              nonvtx_iso_blobs_energy_in_prong[:5]
+isoblob_nhits          nonvtx_iso_blobs_n_hits_in_prong[:5]
+isoblob_dist           nonvtx_iso_blobs_distance_in_prong[:5]
+
+# --- leading proton candidate (dE/dx)
+p_score          MasterAnaDev_proton_score
+p_score1         MasterAnaDev_proton_score1
+p_score2         MasterAnaDev_proton_score2
+p_T              MasterAnaDev_proton_T_fromdEdx
+p_P              MasterAnaDev_proton_P_fromdEdx
+p_Px             MasterAnaDev_proton_Px_fromdEdx
+p_Py             MasterAnaDev_proton_Py_fromdEdx
+p_Pz             MasterAnaDev_proton_Pz_fromdEdx
+p_theta          MasterAnaDev_proton_theta
+p_calib_E        MasterAnaDev_proton_calib_energy
+p_E_bb_up        MasterAnaDev_proton_E_BetheBloch_biasUp
+p_E_bb_dn        MasterAnaDev_proton_E_BetheBloch_biasDown
+p_E_meu_up       MasterAnaDev_proton_E_MEU_biasUp
+p_E_meu_dn       MasterAnaDev_proton_E_MEU_biasDown
+p_E_mass_up      MasterAnaDev_proton_E_Mass_biasUp
+p_E_mass_dn      MasterAnaDev_proton_E_Mass_biasDown
+p_E_birks        MasterAnaDev_proton_E_Birks_bias
+p_s1_bb_up       MasterAnaDev_proton_score1_BetheBloch_biasUp
+p_s1_bb_dn       MasterAnaDev_proton_score1_BetheBloch_biasDown
+p_s1_meu_up      MasterAnaDev_proton_score1_MEU_biasUp
+p_s1_meu_dn      MasterAnaDev_proton_score1_MEU_biasDown
+p_s1_mass_up     MasterAnaDev_proton_score1_Mass_biasUp
+p_s1_mass_dn     MasterAnaDev_proton_score1_Mass_biasDown
+p_s1_birks       MasterAnaDev_proton_score1_Birks_bias
+
+# --- secondary proton candidates
+n_secp           MasterAnaDev_sec_protons_proton_scores_sz
+secp_score       MasterAnaDev_sec_protons_proton_scores[:4]
+secp_score1      MasterAnaDev_sec_protons_proton_scores1[:4]
+secp_T           MasterAnaDev_sec_protons_T_fromdEdx[:4]
+secp_T_calo      MasterAnaDev_sec_protons_T_fromCalo[:4]
+secp_P           MasterAnaDev_sec_protons_P_fromdEdx[:4]
+secp_theta       MasterAnaDev_sec_protons_theta_fromdEdx[:4]
+
+# --- hadron / pion track candidates (CC pion analyses)
+had_number       MasterAnaDev_hadron_number
+had_isExiting    MasterAnaDev_hadron_isExiting[:3]
+had_isForked     MasterAnaDev_hadron_isForked[:3]
+had_isODMatch    MasterAnaDev_hadron_isODMatch[:3]
+had_isSideECAL   MasterAnaDev_hadron_isSideECAL[:3]
+had_isTracker    MasterAnaDev_hadron_isTracker[:3]
+had_LLR          MasterAnaDev_hadron_piFit_scoreLLR[:3]
+had_piscore1     MasterAnaDev_hadron_piFit_score1[:3]
+had_mich_cat     MasterAnaDev_hadron_endMichel_category[:3]
+had_mich_E       MasterAnaDev_hadron_endMichel_energy[:3]
+had_mich_ndig    MasterAnaDev_hadron_endMichel_ndigits[:3]
+had_pi_E_rcorr   MasterAnaDev_hadron_pion_E_recoil_corr[:3]
+had_pi_E_corr    MasterAnaDev_hadron_pion_E_corr[:3]
+had_pi_p_corr    MasterAnaDev_hadron_pion_p_corr[:3]
+pi_E             MasterAnaDev_pion_E[:3]
+pi_P             MasterAnaDev_pion_P[:3]
+pi_Px            MasterAnaDev_pion_Px[:3]
+pi_Py            MasterAnaDev_pion_Py[:3]
+pi_Pz            MasterAnaDev_pion_Pz[:3]
+pi_T             MasterAnaDev_pion_T[:3]
+pi_theta         MasterAnaDev_pion_theta[:3]
+pi_phi           MasterAnaDev_pion_phi[:3]
+pi_theta_up      MasterAnaDev_pion_theta_biasUp[:3]
+pi_theta_dn      MasterAnaDev_pion_theta_biasDown[:3]
+pi_E_bb_up       MasterAnaDev_pion_E_BetheBloch_biasUp[:3]
+pi_E_bb_dn       MasterAnaDev_pion_E_BetheBloch_biasDown[:3]
+pi_E_mass_up     MasterAnaDev_pion_E_Mass_biasUp[:3]
+pi_E_mass_dn     MasterAnaDev_pion_E_Mass_biasDown[:3]
+pi_E_birks       MasterAnaDev_pion_E_Birks[:3]
+pi_nNodes        MasterAnaDev_pion_nNodes[:3]
+pi_Q0            MasterAnaDev_pion_lastnode_Q0[:3]
+pi_Q1            MasterAnaDev_pion_lastnode_Q1[:3]
+pi_Q2            MasterAnaDev_pion_lastnode_Q2[:3]
+pi_Q3            MasterAnaDev_pion_lastnode_Q3[:3]
+pi_Q4            MasterAnaDev_pion_lastnode_Q4[:3]
+pi_Q5            MasterAnaDev_pion_lastnode_Q5[:3]
+pi_startZ        MasterAnaDev_pion_startPointZ[:3]
+pi_endX          MasterAnaDev_pion_endPointX[:3]
+pi_endY          MasterAnaDev_pion_endPointY[:3]
+pi_endZ          MasterAnaDev_pion_endPointZ[:3]
+pi_score         MasterAnaDev_pion_score
+pi_score1        MasterAnaDev_pion_score1
+pi_s1_bb_up      MasterAnaDev_piFit_score1_BetheBloch_biasUp
+pi_s1_bb_dn      MasterAnaDev_piFit_score1_BetheBloch_biasDown
+pi_s1_mass_up    MasterAnaDev_piFit_score1_Mass_biasUp
+pi_s1_mass_dn    MasterAnaDev_piFit_score1_Mass_biasDown
+pi_s1_birks      MasterAnaDev_piFit_score1_Birks

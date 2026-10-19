@@ -12,3 +12,4 @@ outputs/
 joblists/
 !measurements/*/reference/*.root
 measurements/ccqelike_3d_me_fhc/reference/*covariances_underoverbinsremoved.csv
+grid/tarballs/
