@@ -2,7 +2,7 @@
 
 per universe u:
   N_u      = data - sum_c s_c,u * B_c,u           (MC already scaled to data POT)
-  U_u      = Unfold(N_u; CV migration, n_iter)
+  U_u      = Unfold(N_u; migration_u, n_iter)   (universe migration as in MnvUnfold; CV if absent)
   eps_u    = effnum_u / effden_u
   sigma_u  = U_u / (eps_u * Phi_u * T_u * POT_data) * 1e4 / binvolume      [cm^2 / nucleon / bin unit]
 Statistical covariance: data Poisson errors propagated analytically through the unfolding.
@@ -76,7 +76,10 @@ def extract(acc, meas, info, n_iter=None, bkg_scales=None, zmin=5980.0, zmax=842
     B = background_total(acc, meas, s, bkg_scales)
     N = data[:, None] - B
     mig = acc["mig"]
-    Uall = unfold(N, mig, n_iter)
+    if "mig_u" in acc:
+        Uall = np.column_stack([unfold(N[:, u], acc["mig_u"].dense(mig.shape, u), n_iter) for u in range(N.shape[1])])
+    else:
+        Uall = unfold(N, mig, n_iter)
     U0, cov_unf = unfold(N[:, 0], mig, n_iter, cov_measured=np.clip(data, 0, None))
     effnum, effden = acc["effnum"], acc["effden"]
     eff = np.divide(effnum, effden, out=np.zeros_like(effnum), where=effden > 0)

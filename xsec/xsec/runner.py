@@ -21,7 +21,7 @@ import time
 import numpy as np
 
 from . import io
-from .histo import Accumulator, fill, fill2d
+from .histo import Accumulator, SparseCols, fill, fill2d
 from .kinematics import CV, Event
 from .tunes import Tune
 
@@ -72,6 +72,9 @@ def process_mc(path, playlist, scale):
                     _scatter(acc, f"bkg/{s}/{cname}", fill(RB.size, r_idx[mb], w[mb]), cols, U)
                 if s == meas.signal_sample:
                     _scatter(acc, "effnum", fill(TB.size, t_idx[ms], w[ms]), cols, U)
+                    # per-universe migration (lateral shifts and weights change the response)
+                    pair = np.where((r_idx[ms] >= 0) & (t_idx[ms] >= 0), r_idx[ms] * TB.size + t_idx[ms], -1)
+                    acc.add("mig_u", SparseCols.fill(pair, w[ms], cols, U))
                     if shift is CV:
                         acc.add("mig", fill2d(RB.size, TB.size, r_idx[ms], t_idx[ms], w_cv[ms]))
             if hasattr(meas, "extra"):

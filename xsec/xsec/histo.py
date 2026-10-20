@@ -19,11 +19,45 @@ def fill2d(nx, ny, ix, iy, w):
     return np.bincount(ix[ok] * ny + iy[ok], weights=w[ok], minlength=nx * ny).reshape(nx, ny)
 
 
+class SparseCols:
+    """Sparse 2D histogram per universe: sorted cell keys (n,) and values (n, U).
+
+    Used for the per-universe migration matrix, whose dense form (n_reco x n_true x U) would not
+    fit in memory for fine 3D binnings while only a small fraction of cells is populated."""
+
+    def __init__(self, keys, vals):
+        self.keys = np.asarray(keys, dtype=np.int64)
+        self.vals = np.asarray(vals, dtype=np.float64)
+
+    @classmethod
+    def fill(cls, key, w, cols, U):
+        """key: (n,) cell index (<0 dropped); w: (n, len(cols)) weights for universes `cols`."""
+        ok = key >= 0
+        uk, inv = np.unique(key[ok], return_inverse=True)
+        vals = np.zeros((len(uk), U))
+        vals[:, cols] = fill(len(uk), inv, w[ok])
+        return cls(uk, vals)
+
+    def __add__(self, other):
+        keys = np.union1d(self.keys, other.keys)
+        vals = np.zeros((len(keys), self.vals.shape[1]))
+        vals[np.searchsorted(keys, self.keys)] += self.vals
+        vals[np.searchsorted(keys, other.keys)] += other.vals
+        return SparseCols(keys, vals)
+
+    def dense(self, shape, u):
+        out = np.zeros(int(np.prod(shape)))
+        out[self.keys] = self.vals[:, u]
+        return out.reshape(shape)
+
+
 class Accumulator(dict):
-    """dict of numpy arrays that adds element-wise."""
+    """dict of numpy arrays (or SparseCols) that adds element-wise."""
 
     def add(self, key, arr):
-        if key in self:
+        if isinstance(arr, SparseCols):
+            self[key] = self[key] + arr if key in self else arr
+        elif key in self:
             self[key] = self[key] + arr
         else:
             self[key] = np.array(arr, dtype=np.float64)
