@@ -30,6 +30,12 @@ for attempt in 1 2 3; do
   echo "makedf failed rc=$rc (attempt $attempt)"; sleep 60
 done
 date
+# rc 6: some inputs could not be opened (e.g. dCache pool offline) but the output is complete
+# for the others and its meta tree holds only their POT.  Keep it if MAKEDF_ALLOW_MISSING=1.
+if [ $rc -eq 6 ] && [ "${MAKEDF_ALLOW_MISSING:-0}" = "1" ]; then
+  echo "MISSING INPUTS (kept partial output):"; grep "failed to open" $LOG | awk '{print $5}' | sort -u
+  rc=0
+fi
 
 ifdh mkdir_p $OUTDIR/logs
 if [ $rc -eq 0 ]; then

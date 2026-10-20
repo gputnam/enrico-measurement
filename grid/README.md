@@ -22,3 +22,8 @@ OUTNAME=me_fhc_mc grid/submit.sh v1 joblists/v1/me_fhc_mc_resub.txt   # same out
 ```
 Throughput: ~80 s per 21 GB MC file and ~30 s per data file on fast dCache pools (some pools are
 much slower); output ~60 MB per MC file, ~1.5 MB per data file.
+
+Inputs on an unavailable dCache pool make makedf exit with rc 6 after processing the other files.
+For such persistent failures resubmit with `-e MAKEDF_ALLOW_MISSING=1` (extra jobsub argument) to keep
+the partial output; POT bookkeeping stays correct because `meta` lists only processed files, and
+the missing inputs are listed in the job log.
