@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xsec"
+version = "0.1.0"
+description = "MINERvA open-data cross-section extraction (selection, universes, unfolding)"
+requires-python = ">=3.9"
+dependencies = ["numpy", "pandas", "uproot", "scipy", "pyyaml", "matplotlib"]
+
+[tool.setuptools.packages.find]
+include = ["xsec*"]
