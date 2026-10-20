@@ -23,15 +23,22 @@ from xsec.tunes import Tune  # noqa: E402
 
 
 def load_reference():
+    import pandas as pd
+    B = QELike3D.reco_binning
+    csv = pd.read_csv(os.path.join(HERE, "reference", "MINERvA_TripleDiffQELike_sumtpptpz_data_cross_section.csv"))
+    gid = csv.iloc[:, 0].to_numpy()  # ROOT TH3 global bin (with flow) == our global index
+    pos = np.cumsum(B.inner_mask()) - 1  # global -> inner position
+    x = np.zeros(int(B.inner_mask().sum()))
+    x[pos[gid]] = csv.iloc[:, 8].to_numpy()
     f = uproot.open(os.path.join(HERE, "reference", "MINERvA_TripleDiffQELike_ptpzsumtp.root"))
-    h = f["ptpzsumtp_data_cross_section_with_total_unc"]
-    x = h.values().ravel(order="F")  # (sumtp, pt, pz) -> sumtp fastest
     covs = {}
     for name in ("TotalCovariance", "StatisticalCovariance", "FluxCovariance"):
         m = f[name]
         n = m.member("fNrows")
         full = np.array(m.member("fElements")).reshape(n, n)
-        covs[name] = QELike3D.reco_binning.inner(QELike3D.reco_binning.inner(full, 0), 1)
+        # the TH3D and its covariances are per bin (not divided by bin volume); the CSV is per GeV^3
+        w = B.widths()
+        covs[name] = B.inner(B.inner(full, 0), 1) / np.outer(w, w)
     return x, covs
 
 

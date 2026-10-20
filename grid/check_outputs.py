@@ -26,7 +26,7 @@ def main():
         try:
             with uproot.open(path) as f:
                 m = f["meta"].arrays(["pot_used", "n_reco_pass", "n_truth_pass"], library="np")
-                ok = len(m["pot_used"]) == len(inputs.split(",")) and (m["pot_used"] > 0).all()
+                ok = len(m["pot_used"]) == len(inputs.split(",")) and (m["pot_used"] >= 0).all()  # empty inputs have POT 0
                 if ok:
                     pot += m["pot_used"].sum()
                     nreco += m["n_reco_pass"].sum()

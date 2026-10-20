@@ -2,10 +2,10 @@
 mc_run           mc_run
 mc_subrun        mc_subrun
 mc_evt           mc_nthEvtInFile
-had_tm_pdg       MasterAnaDev_hadron_tm_PDGCode[:3]
-had_tm_beginKE   MasterAnaDev_hadron_tm_beginKE[:3]
-had_tm_fraction  MasterAnaDev_hadron_tm_fraction[:3]
-had_tm_destruct  MasterAnaDev_hadron_tm_destructCode[:3]
+had_tm_pdg       MasterAnaDev_hadron_tm_PDGCode[:5]
+had_tm_beginKE   MasterAnaDev_hadron_tm_beginKE[:5]
+had_tm_fraction  MasterAnaDev_hadron_tm_fraction[:5]
+had_tm_destruct  MasterAnaDev_hadron_tm_destructCode[:5]
 t_reco_good_obj  truth_reco_hasGoodObjects
 t_reco_good_vtx  truth_reco_isGoodVertex
 t_reco_fv_smear  truth_reco_isFidVol_smeared
