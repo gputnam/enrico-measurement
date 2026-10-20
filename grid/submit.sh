@@ -11,7 +11,7 @@ shift 2
 REPO=$(cd $(dirname $(readlink -f $0))/.. && pwd)
 TAR=$REPO/grid/tarballs/makedf_${TAG}.tar.gz
 [ -f $TAR ] || { echo "missing $TAR; run grid/build_tarball.sh $TAG"; exit 1; }
-NAME=$(basename $LIST .txt)
+NAME=${OUTNAME:-$(basename $LIST .txt)}  # OUTNAME overrides (e.g. for resubmissions)
 OUTDIR=/pnfs/sbnd/scratch/users/${USER}/MvA-Loop/df/${TAG}/${NAME}
 mkdir -p $OUTDIR/logs
 N=$(grep -c . $LIST)

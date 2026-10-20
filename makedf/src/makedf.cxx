@@ -19,6 +19,7 @@
 
 #include "Columns.h"
 #include "Derived.h"
+#include "FSIWeight.h"
 #include "TFile.h"
 #include "TSystem.h"
 #include "TTree.h"
@@ -94,9 +95,12 @@ long ProcessTree(TTree* in, TTree* out, const std::vector<std::vector<ColumnSpec
     for (auto& x : c) cols.push_back(std::move(x));
   }
   TruthSummary summary;
-  if (withSummary) {
+  FSIWeights fsi;
+  if (withSummary) {  // MC: truth summary and truth-level reweights
     summary.request(bs);
     summary.book(out);
+    fsi.request(bs);
+    fsi.book(out);
   }
   BindOutput(out, "file_id", &fileIdOut, 'I');
   fileIdOut = fileId;
@@ -112,7 +116,10 @@ long ProcessTree(TTree* in, TTree* out, const std::vector<std::vector<ColumnSpec
     }
     if (isTruthTree ? !presel.passTruth() : !presel.passReco()) continue;
     for (auto& c : cols) c->fill();
-    if (withSummary) summary.compute();
+    if (withSummary) {
+      summary.compute();
+      fsi.compute();
+    }
     out->Fill();
     ++written;
   }

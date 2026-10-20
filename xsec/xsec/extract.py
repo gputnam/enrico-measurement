@@ -62,13 +62,17 @@ def covariance_from_universes(x, universes, cv=None):
 
 
 def extract(acc, meas, info, n_iter=None, bkg_scales=None, zmin=5980.0, zmax=8422.0, apothem=850.0,
-            emin=0.0, emax=100.0):
+            emin=0.0, emax=100.0, closure=False):
+    """closure=True: replace data by the CV MC prediction (signal + backgrounds) and also return
+    the generator-level cross section from the truth tree ('truth_xsec') for comparison."""
     universes, tune = info["universes"], info["tune"]
     RB, TB = meas.reco_binning, meas.true_binning
     n_iter = meas.n_iter if n_iter is None else n_iter
     s = meas.signal_sample
     pot = sum(info["pot_data"].values())
     data = acc[f"data/{s}"]
+    if closure:
+        data = acc[f"sig/{s}"][:, 0] + background_total(acc, meas, s)[:, 0]
     B = background_total(acc, meas, s, bkg_scales)
     N = data[:, None] - B
     mig = acc["mig"]
@@ -89,6 +93,7 @@ def extract(acc, meas, info, n_iter=None, bkg_scales=None, zmin=5980.0, zmax=842
     cov_stat = J / np.outer(width, width)
     covs = covariance_from_universes(xs_all, universes, cv=xs0)
     cov_sys = sum(covs.values()) if covs else np.zeros_like(cov_stat)
-    return dict(xsec=xs0, universes=xs_all, cov_stat=cov_stat, cov_bands=covs, cov_sys=cov_sys,
+    truth_xs = (effden[:, 0] / norm[0, 0])[inner] / width
+    return dict(xsec=xs0, truth_xsec=truth_xs, universes=xs_all, cov_stat=cov_stat, cov_bands=covs, cov_sys=cov_sys,
                 cov_total=cov_stat + cov_sys, unfolded=U0[inner], eff=eff[inner, 0], flux_integral=phi[0],
                 n_targets=T0, pot=pot, bkgsub=N[:, 0], data=data, bkg=B[:, 0])
