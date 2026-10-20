@@ -18,7 +18,7 @@ N=$(grep -c . $LIST)
 echo "submitting $N jobs: $LIST -> $OUTDIR"
 jobsub_submit -G sbnd -N $N \
   --memory=2500MB --disk=8GB --expected-lifetime=8h \
-  --resource-provides=usage_model=OPPORTUNISTIC,DEDICATED,OFFSITE \
+  --resource-provides=usage_model=${USAGE_MODEL:-OPPORTUNISTIC,DEDICATED,OFFSITE} \
   --singularity-image /cvmfs/singularity.opensciencegrid.org/fermilab/fnal-wn-el9:latest \
   --tar_file_name dropbox://$TAR \
   -f dropbox://$LIST \

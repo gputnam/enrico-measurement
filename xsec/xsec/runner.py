@@ -41,7 +41,7 @@ def process_mc(path, playlist, scale):
     U = len(universes)
     acc = Accumulator()
     # ---------------- reco rows
-    df = io.load(path, "reco", meas.reco_columns + meas.truth_columns)
+    df = io.load(path, "reco", meas.reco_columns + meas.mc_reco_columns + meas.truth_columns)
     ev = Event(df, True, playlist, meas.minos_p_offset)
     if len(ev):
         pre = meas.preselect(ev)

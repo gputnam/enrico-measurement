@@ -200,6 +200,15 @@ def standard_universes(tune, genie=True, flux=True, rpa=True, twop2h=True, muon=
     return U
 
 
+def response_universes(particles=("proton", "meson", "em", "other")):
+    """Recoil response lateral universes (band names follow MAT: response_<particle>)."""
+    U = []
+    for p in particles:
+        for j, s in enumerate((-1, 1)):
+            U.append(Universe(f"response_{p}", j, "lat", shift=Shift(f"resp_{p}{s:+d}", recoil=((p, s),))))
+    return U
+
+
 def bands(universes):
     """Ordered {band: [universe indices]} excluding the CV."""
     out = {}

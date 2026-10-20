@@ -139,6 +139,17 @@ class Event:
         return in_fv(d["vtx_0"].to_numpy(), d["vtx_1"].to_numpy(), d["vtx_2"].to_numpy(), zmin, zmax, apothem)
 
 
+def recoil_shift(ev, shift, prefix):
+    """Lateral recoil-response shift [MeV]: sum_p nsig_p * max(err_p, 0), err from columns <prefix><p>
+    (MAT ResponseUniverse, legacy error branches).  Data rows get no shift."""
+    if not shift.recoil or not ev.is_mc:
+        return 0.0
+    out = 0.0
+    for particle, nsig in shift.recoil:
+        out = out + nsig * np.maximum(ev[prefix + particle], 0.0)
+    return out
+
+
 def in_hexagon(x, y, apothem=850.0):
     x, y = np.abs(x), np.abs(y)
     side = apothem * 2.0 / np.sqrt(3.0)

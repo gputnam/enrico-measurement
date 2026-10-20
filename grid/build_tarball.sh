@@ -13,6 +13,12 @@ cp $REPO/makedf/build/makedf $STAGE/makedf/bin/
 cp -r $REPO/makedf/config $STAGE/makedf/
 cp $REPO/makedf/scripts/setup_env.sh $STAGE/makedf/scripts/
 cp $REPO/grid/gridjob.sh $STAGE/
+# aux inputs for the Geant hadron reweight (MAT data/hadronReweight + per-playlist renormalization)
+AUX=${MAKEDF_AUX:-/exp/sbnd/data/users/gputnam/MvA-Loop/aux}/MATFluxAndReweightFiles
+mkdir -p $STAGE/makedf/aux/MATFluxAndReweightFiles/hadronReweight $STAGE/makedf/aux/MATFluxAndReweightFiles/mhrwKineRenorm
+cp $AUX/hadronReweight/*.root $STAGE/makedf/aux/MATFluxAndReweightFiles/hadronReweight/
+cp $AUX/mhrwKineRenorm/Renorm_Kine_Truth_Minerva*_v10_HD_withElastics_RwgtNeutronCV_z5991-8408_a850.root \
+   $STAGE/makedf/aux/MATFluxAndReweightFiles/mhrwKineRenorm/
 (cd $REPO && git rev-parse HEAD 2>/dev/null; git -C $REPO status --porcelain | head -20) > $STAGE/makedf/VERSION
 mkdir -p $REPO/grid/tarballs
 tar czf $REPO/grid/tarballs/makedf_${TAG}.tar.gz -C $STAGE .

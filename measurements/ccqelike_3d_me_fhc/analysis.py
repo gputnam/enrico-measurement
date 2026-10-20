@@ -13,8 +13,9 @@ Reco SumTp proxy: calorimetric visible recoil (nonvtx_iso_blobs_energy + dispr_i
 import numpy as np
 
 from xsec.binning import Binning
-from xsec.kinematics import CV, q2_qe
+from xsec.kinematics import CV, q2_qe, recoil_shift
 from xsec.measurement import Measurement
+from xsec.universes import response_universes, standard_universes
 
 SUMTP = [0, 0.02, 0.04, 0.08, 0.12, 0.16, 0.24, 0.32, 0.40, 0.60, 0.799]
 PT = [0, 0.075, 0.15, 0.25, 0.325, 0.4, 0.475, 0.55, 0.7, 0.85, 1.0, 2.5]
@@ -48,11 +49,15 @@ class QELike3D(Measurement):
                            "nonvtx_iso_blobs_E", "dispr_id_E", "p_score", "n_secp"]
                           + [f"isoblob_z_{i}" for i in range(NBLOB_SLOTS)]
                           + [f"secp_score_{i}" for i in range(NSECP_SLOTS)])
+    extra_mc_reco_columns = [f"rerr_dispr_{p}" for p in ("proton", "meson", "em", "other")]
     extra_truth_columns = ["tfs_np", "tfs_npip", "tfs_npim", "tfs_npi0", "tfs_nkpm", "tfs_nk0", "tfs_nomeson",
                            "tfs_nhbaryon", "tfs_maxgammaE", "tfs_nlep", "tfs_sumTp", "w_fsi_elastic"]
 
     def __init__(self, fit_backgrounds=True):
         self.fit_backgrounds = fit_backgrounds
+
+    def universes(self, tune):
+        return standard_universes(tune) + response_universes()
 
     # ------------------------------------------------------------ reco
     def preselect(self, ev):
@@ -86,7 +91,7 @@ class QELike3D(Measurement):
                 & self.protons_ok(ev, mu))
         michel = ev["n_improved_michel"] > 0
         blobs = self.n_blobs(ev) >= 2
-        recoil = (ev["nonvtx_iso_blobs_E"] + ev["dispr_id_E"]) / 1000.0
+        recoil = (ev["nonvtx_iso_blobs_E"] + ev["dispr_id_E"] + recoil_shift(ev, shift, "rerr_dispr_")) / 1000.0
         samples = {"A": base & ~michel & ~blobs, "B": base & michel & ~blobs,
                    "C": base & ~michel & blobs, "D": base & michel & blobs}
         return (recoil, mu["pt"] / 1000.0, mu["pz"] / 1000.0), samples

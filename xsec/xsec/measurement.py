@@ -31,10 +31,15 @@ class Measurement:
     true_binning = None
     extra_reco_columns = []
     extra_truth_columns = []
+    extra_mc_reco_columns = []  # MC-only reco-tree columns (e.g. response errors)
 
     @property
     def reco_columns(self):
         return sorted(set(MUON_COLUMNS + self.extra_reco_columns))
+
+    @property
+    def mc_reco_columns(self):
+        return sorted(set(self.extra_mc_reco_columns))
 
     @property
     def truth_columns(self):

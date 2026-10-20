@@ -169,7 +169,7 @@ class LowRecoilPionSummary {
   lrp::MichelEvent fEvt;
 
   // untracked (data + MC)
-  int ncand, nfitted, nclusters, nall, npass2d, pass_has, pass_2d, pass_closest, good;
+  int ncand, nfitted, nclusters, nall, npass2d, good;
   int idx, tuple_idx, matchtype, bestview;
   float range, tpi, theta, phi, best_x, best_y, best_z, michel_e, michel_dt, ovfrac;
   // event-level Eavail ingredients

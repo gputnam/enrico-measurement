@@ -20,6 +20,8 @@
 #include "Columns.h"
 #include "Derived.h"
 #include "FSIWeight.h"
+#include "HadronReweight.h"
+#include "LowRecoilPion.h"
 #include "TFile.h"
 #include "TSystem.h"
 #include "TTree.h"
@@ -82,7 +84,7 @@ TFile* OpenWithRetry(const std::string& path, int tries = 4) {
 
 // Processes one tree into `out`; returns number of rows written.
 long ProcessTree(TTree* in, TTree* out, const std::vector<std::vector<ColumnSpec>*>& specs, bool isTruthTree,
-                 bool withSummary, const Options& o, int fileId, int& fileIdOut) {
+                 bool withSummary, const Options& o, int fileId, int& fileIdOut, HadronReweight* hr) {
   BranchSet bs(in);
   Preselection presel(o.presel);
   if (isTruthTree) presel.requestTruth(bs);
@@ -96,11 +98,22 @@ long ProcessTree(TTree* in, TTree* out, const std::vector<std::vector<ColumnSpec
   }
   TruthSummary summary;
   FSIWeights fsi;
+  std::unique_ptr<GeantWeights> geant;
   if (withSummary) {  // MC: truth summary and truth-level reweights
     summary.request(bs);
     summary.book(out);
     fsi.request(bs);
     fsi.book(out);
+    if (hr) {
+      geant = std::make_unique<GeantWeights>(*hr, isTruthTree);
+      geant->request(bs);
+      geant->book(out);
+    }
+  }
+  LowRecoilPionSummary lrp;  // untracked-pion (Michel) reconstruction summary, reco rows only
+  if (!isTruthTree) {
+    lrp.request(bs);
+    lrp.book(out);
   }
   BindOutput(out, "file_id", &fileIdOut, 'I');
   fileIdOut = fileId;
@@ -119,7 +132,9 @@ long ProcessTree(TTree* in, TTree* out, const std::vector<std::vector<ColumnSpec
     if (withSummary) {
       summary.compute();
       fsi.compute();
+      if (geant) geant->compute();
     }
+    if (!isTruthTree) lrp.compute();
     out->Fill();
     ++written;
   }
@@ -161,6 +176,7 @@ int main(int argc, char** argv) {
   tmeta->Branch("tag", tag, "tag/C");
   snprintf(tag, sizeof(tag), "%s", o.tag.c_str());
 
+  std::unique_ptr<HadronReweight> hadronRW;  // created on the first MC file
   int firstMC = -1;
   int nfail = 0;
   for (size_t ifile = 0; ifile < o.inputs.size(); ++ifile) {
@@ -188,14 +204,19 @@ int main(int argc, char** argv) {
     potUsed = sumUsed;
     potTotal = sumTotal;
 
+    if (isMC && !hadronRW) {
+      HadronReweightConfig hc;
+      hc.dataDir = ResolveHadronReweightDataDir("", o.configDir);
+      hadronRW = std::make_unique<HadronReweight>(hc);
+    }
     std::vector<std::vector<ColumnSpec>*> recoSpecs{&recoSpec};
     if (isMC) { recoSpecs.push_back(&recoMCSpec); recoSpecs.push_back(&truthSpec); }
     nReco = mad->GetEntries();
-    nRecoPass = ProcessTree(mad, treco, recoSpecs, false, isMC, o, fileId, fileIdOut);
+    nRecoPass = ProcessTree(mad, treco, recoSpecs, false, isMC, o, fileId, fileIdOut, hadronRW.get());
     nTruth = nTruthPass = 0;
     if (isMC && !o.noTruth) {
       nTruth = truth->GetEntries();
-      nTruthPass = ProcessTree(truth, ttruth, {&truthSpec}, true, true, o, fileId, fileIdOut);
+      nTruthPass = ProcessTree(truth, ttruth, {&truthSpec}, true, true, o, fileId, fileIdOut, hadronRW.get());
     }
     snprintf(fname, sizeof(fname), "%s", path.c_str());
     tmeta->Fill();

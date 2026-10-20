@@ -41,3 +41,10 @@ rpass_low_neutron        part_response_recoil_passive_low_neutron_id
 rpass_mid_neutron        part_response_recoil_passive_mid_neutron_id
 rpass_high_neutron       part_response_recoil_passive_high_neutron_id
 rpass_xtalk              part_response_recoil_passive_xtalk_id
+rerr_dispr_proton        part_response_recoil_dispr_id_and_blobbed_energy_proton_id_err
+rerr_dispr_meson         part_response_recoil_dispr_id_and_blobbed_energy_meson_id_err
+rerr_dispr_em            part_response_recoil_dispr_id_and_blobbed_energy_em_id_err
+rerr_dispr_other         part_response_recoil_dispr_id_and_blobbed_energy_other_id_err
+rerr_dispr_low_neutron   part_response_recoil_dispr_id_and_blobbed_energy_low_neutron_id_err
+rerr_dispr_mid_neutron   part_response_recoil_dispr_id_and_blobbed_energy_mid_neutron_id_err
+rerr_dispr_high_neutron  part_response_recoil_dispr_id_and_blobbed_energy_high_neutron_id_err

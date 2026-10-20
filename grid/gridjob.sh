@@ -15,6 +15,7 @@ if [ -z "$OUTNAME" ]; then echo "no job line for process $PROCESS"; exit 1; fi
 echo "outname $OUTNAME"
 echo "inputs $INPUTS"
 
+export MAKEDF_AUX=$TARDIR/makedf/aux
 source $TARDIR/makedf/scripts/setup_env.sh
 spack load ifdhc@2.8.0 arch=linux-almalinux9-x86_64_v3
 export IFDH_CP_MAXRETRIES=3
