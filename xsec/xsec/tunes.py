@@ -25,7 +25,8 @@ TUNES = {
 class Tune:
     def __init__(self, name="v1", nu_pdg=14, nue_constraint=True, n_flux_universes=100, neutrino=True, **over):
         cfg = dict(nonrespi=True, twop2h=True, rpa=True, minos_eff=True, d2pion=False, lowq2pi=False, zexp=False,
-                   fsi_elastic=False, geant_neutron_cv=False, coh=False)
+                   fsi_elastic=False, geant_neutron_cv=False, coh=False, lowq2pi_channel="JOINT",
+                   fsi_absorption=False, geant_neutron_cv_reco_only=False, coh_use_epi=False, diffractive_scale=1.0)
         cfg.update(TUNES[name])
         cfg.update(over)
         self.name, self.cfg = name, cfg
@@ -84,19 +85,24 @@ class Tune:
             c["rpa"] = np.ones(len(ev))
         c["d2pion"] = (rw.d2_pion_tune_weight(it, ev["mc_current"], ev["g_MaRES_m1"], ev["g_MaRES_p1"])
                        if self.cfg["d2pion"] else np.ones(len(ev)))
-        c["lowq2pi"] = (rw.lowq2pi_weight(ev["mc_Q2"] / 1e6, it, ev["mc_current"])
+        c["lowq2pi"] = (rw.lowq2pi_weight(ev["mc_Q2"] / 1e6, it, ev["mc_current"], self.cfg["lowq2pi_channel"])
                         if self.cfg["lowq2pi"] else np.ones(len(ev)))
         c["zexp"] = rw.zexp_weight(ev["mc_Q2"] / 1e6, it) if self.cfg["zexp"] else np.ones(len(ev))
         c["fsi"] = ev["w_fsi_elastic"] if self.cfg["fsi_elastic"] else np.ones(len(ev))
+        if self.cfg["fsi_absorption"]:
+            c["fsi"] = c["fsi"] * ev["w_fsi_absorption"]
         if self.cfg["coh"]:
             px, py, pz = ev["tfs_pi_px_0"], ev["tfs_pi_py_0"], ev["tfs_pi_pz_0"]
             from .kinematics import rotate_to_beam
             px, py, pz = rotate_to_beam(px, py, pz)
             th = np.degrees(np.arccos(np.clip(pz / np.sqrt(px * px + py * py + pz * pz), -1, 1)))
-            c["coh"] = rw.coh_weight(np.nan_to_num(th, nan=0.0), np.nan_to_num(ev["tfs_pi_T_0"] / 1000.0, nan=0.0), it)
+            e = ev["tfs_pi_T_0"] + (139.57018 if self.cfg["coh_use_epi"] else 0.0)  # CC-CH-pip-ana passes E_pi
+            c["coh"] = rw.coh_weight(np.nan_to_num(th, nan=0.0), np.nan_to_num(e / 1000.0, nan=0.0), it)
+            c["coh"] = c["coh"] * np.where(it == 4, self.cfg["diffractive_scale"], 1.0)
         else:
             c["coh"] = np.ones(len(ev))
-        c["geant_ncv"] = ev["geant_neutron_cv"] if self.cfg["geant_neutron_cv"] else np.ones(len(ev))
+        use_ncv = self.cfg["geant_neutron_cv"] and not (self.cfg["geant_neutron_cv_reco_only"] and ev.is_truth)
+        c["geant_ncv"] = ev["geant_neutron_cv"] if use_ncv else np.ones(len(ev))
         ev._cache["tune"] = c
         return c
 
