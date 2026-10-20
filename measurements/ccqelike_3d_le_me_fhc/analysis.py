@@ -9,13 +9,11 @@ given in the paper, so the PRL SumTp binning is used (to be revisited if tables 
 The LE beam configuration (playlists minerva1/7/9/13A-E, LE flux, GENIE 2.8.4-based tune without
 the elastic-FSI fix) is prepared via `LE_CONFIG` but the LE open-data samples are not yet released.
 """
-import os
-import sys
+from xsec.binning import Binning
+from xsec.util import load_measurement_module
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ccqelike_3d_me_fhc"))
-from analysis import SUMTP, QELike3D, fit_cells  # noqa: E402
-
-from xsec.binning import Binning  # noqa: E402
+_prl = load_measurement_module("ccqelike_3d_me_fhc")
+SUMTP, QELike3D, fit_cells = _prl.SUMTP, _prl.QELike3D, _prl.fit_cells
 
 PT = [0, 0.15, 0.25, 0.325, 0.4, 0.475, 0.55, 0.7, 0.85, 1.0, 2.5]
 PZ = [1.5, 2.0, 2.5, 3.0, 3.5, 4.5]

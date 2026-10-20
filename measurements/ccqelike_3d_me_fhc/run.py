@@ -13,8 +13,10 @@ import numpy as np
 import uproot
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
-from analysis import PT, PZ, SUMTP, QELike3D, background_scales  # noqa: E402
+from xsec.util import load_measurement_module  # noqa: E402
+
+_m = load_measurement_module("ccqelike_3d_me_fhc")
+PT, PZ, SUMTP, QELike3D, background_scales = _m.PT, _m.PZ, _m.SUMTP, _m.QELike3D, _m.background_scales
 
 from xsec import compare, io  # noqa: E402
 from xsec.extract import extract  # noqa: E402
