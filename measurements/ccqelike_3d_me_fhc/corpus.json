@@ -1,0 +1,5 @@
+[
+  {"id": "ccqelike_3d_me_fhc", "class": "QELike3D", "kwargs": {},
+   "title": "numu CC QE-like d3sigma/dSumTp dpT dp|| [sumtp GeV, pt GeV/c, pz GeV/c]",
+   "result": "ccqelike_3d_me_fhc/v1/qe3d_v1_xsec.pkl"}
+]

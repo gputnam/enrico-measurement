@@ -1,0 +1,65 @@
+[
+  {
+    "id": "ccpip_me_fhc_tpi",
+    "class": "CCPip",
+    "kwargs": {
+      "variable": "tpi"
+    },
+    "title": "numu CC1pi+ (W_exp<1.4 GeV) dsigma/dtpi: pion kinetic energy [MeV]",
+    "result": "ccpip_me_fhc/v1/tpi_xsec.pkl"
+  },
+  {
+    "id": "ccpip_me_fhc_thetapi",
+    "class": "CCPip",
+    "kwargs": {
+      "variable": "thetapi"
+    },
+    "title": "numu CC1pi+ (W_exp<1.4 GeV) dsigma/dthetapi: pion angle [deg]",
+    "result": "ccpip_me_fhc/v1/thetapi_xsec.pkl"
+  },
+  {
+    "id": "ccpip_me_fhc_pmu",
+    "class": "CCPip",
+    "kwargs": {
+      "variable": "pmu"
+    },
+    "title": "numu CC1pi+ (W_exp<1.4 GeV) dsigma/dpmu: muon momentum [GeV/c]",
+    "result": "ccpip_me_fhc/v1/pmu_xsec.pkl"
+  },
+  {
+    "id": "ccpip_me_fhc_pzmu",
+    "class": "CCPip",
+    "kwargs": {
+      "variable": "pzmu"
+    },
+    "title": "numu CC1pi+ (W_exp<1.4 GeV) dsigma/dpzmu: muon longitudinal momentum [GeV/c]",
+    "result": "ccpip_me_fhc/v1/pzmu_xsec.pkl"
+  },
+  {
+    "id": "ccpip_me_fhc_ptmu",
+    "class": "CCPip",
+    "kwargs": {
+      "variable": "ptmu"
+    },
+    "title": "numu CC1pi+ (W_exp<1.4 GeV) dsigma/dptmu: muon transverse momentum [GeV/c]",
+    "result": "ccpip_me_fhc/v1/ptmu_xsec.pkl"
+  },
+  {
+    "id": "ccpip_me_fhc_thetamu",
+    "class": "CCPip",
+    "kwargs": {
+      "variable": "thetamu"
+    },
+    "title": "numu CC1pi+ (W_exp<1.4 GeV) dsigma/dthetamu: muon angle [deg]",
+    "result": "ccpip_me_fhc/v1/thetamu_xsec.pkl"
+  },
+  {
+    "id": "ccpip_me_fhc_q2",
+    "class": "CCPip",
+    "kwargs": {
+      "variable": "q2"
+    },
+    "title": "numu CC1pi+ (W_exp<1.4 GeV) dsigma/dq2: Q^2 [GeV^2]",
+    "result": "ccpip_me_fhc/v1/q2_xsec.pkl"
+  }
+]

@@ -1,0 +1,5 @@
+[
+  {"id": "ccqelike_3d_le_me_fhc", "class": "QELike3DLEBinning", "kwargs": {},
+   "title": "numu CC QE-like d3sigma/dSumTp dpT dp|| at low p|| (1.5-4.5 GeV/c) [sumtp GeV, pt GeV/c, pz GeV/c]",
+   "result": "ccqelike_3d_le_me_fhc/v1/qele_v1_xsec.pkl"}
+]

@@ -1,0 +1,6 @@
+[
+  {"id": "_template", "class": "TemplateMeasurement", "kwargs": {},
+   "title": "TEMPLATE numu CC inclusive dsigma/dp_mu (theta_mu<20 deg) [pmu GeV/c]",
+   "result": "_template/_template_xsec.pkl",
+   "motivation": "Why this measurement challenges the current model (filled in by the experimentalist)."}
+]

@@ -1,0 +1,5 @@
+[
+  {"id": "ccinc_2d_me_fhc", "class": "CCInclusive2D", "kwargs": {},
+   "title": "numu CC inclusive d2sigma/dpT dp|| (theta_mu<20 deg, p||>1.5 GeV/c) [pt GeV/c, pz GeV/c]",
+   "result": "ccinc_2d_me_fhc/v1/ccinc_v1_xsec.pkl"}
+]

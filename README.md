@@ -77,3 +77,18 @@ Results go to `outputs/<measurement>/` (default `-o`; not tracked except `STATUS
 | `ccqelike_3d_me_fhc` | reproduced (integral 0.998, uncertainties match) |
 | `ccqelike_3d_le_me_fhc` | partial: ME consistent with PRL; no numerical release; LE samples unreleased |
 | `ccpip_me_fhc` | largely reproduced; low-Tpi residuals from non-public MnvTune v4.7.1 weights |
+
+## Model comparisons and the closed loop (`orchestrate/`)
+
+- `xsec/xsec/genpred.py` evaluates a nuflow generator file in any measurement's own `signal()` /
+  `truth()` and `true_binning` (generator final states are converted to the DF truth columns), giving
+  a model prediction in the same units as `xsec` and `truth_xsec` (the MINERvA GENIE/MnvTune prediction).
+- `xsec/xsec/export_flux.py` writes the flux the cross sections are normalised to (for the generator).
+- `xsec/xsec/corpus.py` (`python -m xsec.corpus add|predict|summary`) maintains a *corpus*: per
+  measurement `definition.md`, `result.npz`, `comparison.txt`, `projections.txt`, `metrics.json`, and a
+  `summary.txt`; `xsec/xsec/corpus_plots.py` makes the human-facing plots.
+- Each measurement declares its corpus entries in `measurements/<m>/corpus.json`;
+  `measurements/run_measurement.py` is a generic driver (event loop, background fit, unfolding, closure).
+- New measurements: `measurements/AUTHORING.md` and `measurements/_template/`.
+- The seed results (`outputs/*/v1/*_xsec.pkl`, git-ignored) are kept at
+  `/exp/sbnd/data/users/gputnam/MvA-Loop/seed_results/` with the same layout.
