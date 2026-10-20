@@ -62,11 +62,48 @@ def _rvx1pi(knob, sign):
     return f
 
 
+def _d2_mares(sign):
+    """GENIE_D2_MaRES: MaRES 0.94 +- 0.05 relative to the tuned CV (CC RES only).
+
+    Note: MAT's GenieMaResUniverse::GetWeightRatioToCV returns the CV GENIE weight (not 1) for
+    non-CC-RES events, which looks like a bug; we use ratio 1 for non-RES events.
+    """
+    def f(ev, tune):
+        m1, p1 = ev["g_MaRES_m1"], ev["g_MaRES_p1"]
+        num = rw.genie_par_reweight(m1, p1, rw.D2_MARES + sign * 0.05, rw.GENIE_MARES, rw.GENIE_MARES_1SIG)
+        den = rw.genie_par_reweight(m1, p1, rw.D2_MARES, rw.GENIE_MARES, rw.GENIE_MARES_1SIG)
+        r = np.divide(num, den, out=np.ones(len(ev)), where=den != 0)
+        return np.where(rw.is_cc_res(ev["mc_intType"], ev["mc_current"]), r, 1.0)
+    return f
+
+
+def _d2_norm(sign):
+    def f(ev, tune):
+        return np.where(rw.is_cc_res(ev["mc_intType"], ev["mc_current"]), (rw.D2_RESNORM + sign * 0.07) / rw.D2_RESNORM, 1.0)
+    return f
+
+
+def _ep_mvres(sign):
+    """GENIE_EP_MvRES: MvRES 0.84 +- 3% (electroproduction fit), CC RES only."""
+    def f(ev, tune):
+        r = rw.genie_par_reweight(ev["g_MvRES_m1"], ev["g_MvRES_p1"], 0.84 * (1 + sign * 0.03), 0.84, 0.084)
+        return np.where(rw.is_cc_res(ev["mc_intType"], ev["mc_current"]), r, 1.0)
+    return f
+
+
 def _flux(i):
     def f(ev, tune):
         if "flux_univ" not in ev._cache:
             ev._cache["flux_univ"] = tune.flux_universe_ratios(ev)
         return ev._cache["flux_univ"][i]
+    return f
+
+
+def _zexp(i):
+    def f(ev, tune):
+        q2, it = ev["mc_Q2"] / 1e6, ev["mc_intType"]
+        cv = rw.zexp_weight(q2, it)
+        return np.divide(rw.zexp_weight(q2, it, i), cv, out=np.ones(len(ev)), where=cv != 0)
     return f
 
 
@@ -115,10 +152,17 @@ def standard_universes(tune, genie=True, flux=True, rpa=True, twop2h=True, muon=
         for i in range(n_flux or tune.n_flux_universes):
             U.append(Universe("Flux", i, "vert", ratio=_flux(i), cov_weight=float(w[i])))
     if genie:
-        knobs = GENIE_STANDARD + (GENIE_RES if not tune.cfg["d2pion"] else []) + ["MaCCQE"]
+        knobs = GENIE_STANDARD + (GENIE_RES if not tune.cfg["d2pion"] else []) + ([] if tune.cfg["zexp"] else ["MaCCQE"])
         for k in knobs:
             for j, s in enumerate((-1, 1)):
                 U.append(Universe(f"GENIE_{k}", j, "vert", ratio=_genie(k, s)))
+        if tune.cfg["d2pion"]:
+            for band, fn in (("GENIE_D2_MaRES", _d2_mares), ("GENIE_D2_NormCCRES", _d2_norm), ("GENIE_EP_MvRES", _ep_mvres)):
+                for j, s in enumerate((-1, 1)):
+                    U.append(Universe(band, j, "vert", ratio=fn(s)))
+        if tune.cfg["zexp"]:
+            for i in range(100):
+                U.append(Universe("GENIE_MaZExpCCQE", i, "vert", ratio=_zexp(i)))
         for k in ("Rvn1pi", "Rvp1pi"):
             for j, s in enumerate((-1, 1)):
                 U.append(Universe(f"GENIE_{k}", j, "vert", ratio=_rvx1pi(k, s)))

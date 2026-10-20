@@ -15,6 +15,8 @@ import sys
 import numpy as np
 import ROOT
 
+from . import mnvlib
+
 FILES = [
     "MParamFiles/data/Reweight/outNievesRPAratio-*.root",
     "MParamFiles/data/Reweight/lowQ2pi_weights.root",
@@ -31,6 +33,15 @@ def edges(ax):
 def dump(obj, name, out):
     if not hasattr(obj, "InheritsFrom"):  # bare TArrayD (TH1D also derives from TArrayD)
         out[name + "__arr"] = np.array([obj.At(i) for i in range(obj.GetSize())])
+    elif obj.ClassName() == "PlotUtils::MnvH1D":
+        d = mnvlib.mnvh1d_to_dict(obj)
+        out[name + "__x"] = d["edges"]
+        c = np.zeros(len(d["cv"]) + 2)
+        c[1:-1] = d["cv"]
+        out[name + "__c"] = c
+        for k, v in d.items():
+            if k.startswith("band"):
+                out[f"{name}__{k}"] = v
     elif obj.InheritsFrom("TH2"):
         nx, ny = obj.GetNbinsX(), obj.GetNbinsY()
         out[name + "__x"] = edges(obj.GetXaxis())
@@ -53,6 +64,8 @@ def dump(obj, name, out):
 def main(aux):
     outdir = os.path.join(aux, "npz", "reweight")
     os.makedirs(outdir, exist_ok=True)
+    mnvlib.load(os.path.join(aux, "MATFluxAndReweightFiles", "flux", "flux-gen2thin-pdg14-minervame1D_rearrangedUniverses.root"),
+                os.path.join(aux, "mnvproj"))
     for pat in FILES:
         for fn in sorted(glob.glob(os.path.join(aux, pat))):
             f = ROOT.TFile.Open(fn)

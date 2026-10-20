@@ -67,6 +67,7 @@ cl_trk_esum      cluster_trackerEsum
 cl_ecal_esum     cluster_ecalEsum
 cl_hcal_esum     cluster_hcalEsum
 vtx_blobs_E      vtx_blobs_energy
+dispr_id_E       dispr_id_energy
 rec_vtx100       recoil_energy_nonmuon_vtx100mm
 rec_vtx150       recoil_energy_nonmuon_vtx150mm
 rec_vtx200       recoil_energy_nonmuon_vtx200mm
@@ -96,6 +97,10 @@ imich_dist       improved_michel_dist_vec[:3]
 imich_evis       improved_michel_evis_vec[:3]
 imich_tdiff      improved_michel_tdiff_vec[:3]
 n_fitted_michel  FittedMichel_michel_fitPass_sz
+mm_code          matched_michel_code[:3]
+mm_end_idx       matched_michel_end_idx[:3]
+mm_avg_idx       matched_michel_avg_idx[:3]
+mm_ov_idx        matched_michel_ov_idx[:3]
 
 # --- isolated blobs (pi0 photon candidates)
 n_nonvtx_iso_blobs     n_nonvtx_iso_blobs
@@ -136,9 +141,9 @@ p_s1_birks       MasterAnaDev_proton_score1_Birks_bias
 
 # --- secondary proton candidates
 n_secp           MasterAnaDev_sec_protons_proton_scores_sz
-secp_score       MasterAnaDev_sec_protons_proton_scores[:4]
-secp_score1      MasterAnaDev_sec_protons_proton_scores1[:4]
-secp_T           MasterAnaDev_sec_protons_T_fromdEdx[:4]
+secp_score       MasterAnaDev_sec_protons_proton_scores[:6]
+secp_score1      MasterAnaDev_sec_protons_proton_scores1[:6]
+secp_T           MasterAnaDev_sec_protons_T_fromdEdx[:6]
 secp_T_calo      MasterAnaDev_sec_protons_T_fromCalo[:4]
 secp_P           MasterAnaDev_sec_protons_P_fromdEdx[:4]
 secp_theta       MasterAnaDev_sec_protons_theta_fromdEdx[:4]

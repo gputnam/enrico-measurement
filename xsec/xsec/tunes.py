@@ -3,7 +3,8 @@
   v1     : flux (nu-e constrained) x non-res pi (0.43) x 2p2h low-recoil fit x RPA x MINOS eff.
   v4.x   : v1 x deuterium pion tune (CC RES norm 1.15, MaRES 0.94)
   v4.3.x : v4 x low-Q2 pion suppression (JOINT)    [COH reweight not yet applied]
-  v4.4.x : v4 with z-expansion axial FF            [not yet applied]
+  v4.4.x : v4 with z-expansion axial FF (GENIE_MaZExpCCQE universes replace MaCCQE)
+  vX.Y.1 : elastic FSI bug fix (w_fsi_elastic column from makedf)
 MINOS efficiency is a reco-level weight (1 for truth rows).
 """
 import numpy as np
@@ -14,7 +15,7 @@ from .flux import MuonEnergyFluxCorrection, flux_model
 TUNES = {
     "v1": dict(d2pion=False, lowq2pi=False),
     "v4.3.1": dict(d2pion=True, lowq2pi=True),
-    "v4.4.1": dict(d2pion=True, lowq2pi=False),
+    "v4.4.1": dict(d2pion=True, lowq2pi=False, zexp=True),
     "v4.7.1": dict(d2pion=True, lowq2pi=True),
     "genie": dict(nonrespi=False, twop2h=False, rpa=False, d2pion=False, lowq2pi=False),
 }
@@ -22,7 +23,8 @@ TUNES = {
 
 class Tune:
     def __init__(self, name="v1", nu_pdg=14, nue_constraint=True, n_flux_universes=100, neutrino=True, **over):
-        cfg = dict(nonrespi=True, twop2h=True, rpa=True, minos_eff=True, d2pion=False, lowq2pi=False)
+        cfg = dict(nonrespi=True, twop2h=True, rpa=True, minos_eff=True, d2pion=False, lowq2pi=False, zexp=False,
+                   fsi_elastic=False)
         cfg.update(TUNES[name])
         cfg.update(over)
         self.name, self.cfg = name, cfg
@@ -83,6 +85,8 @@ class Tune:
                        if self.cfg["d2pion"] else np.ones(len(ev)))
         c["lowq2pi"] = (rw.lowq2pi_weight(ev["mc_Q2"] / 1e6, it, ev["mc_current"])
                         if self.cfg["lowq2pi"] else np.ones(len(ev)))
+        c["zexp"] = rw.zexp_weight(ev["mc_Q2"] / 1e6, it) if self.cfg["zexp"] else np.ones(len(ev))
+        c["fsi"] = ev["w_fsi_elastic"] if self.cfg["fsi_elastic"] else np.ones(len(ev))
         ev._cache["tune"] = c
         return c
 
@@ -97,5 +101,5 @@ class Tune:
     def cv_weight(self, ev, shift=None):
         """CV weight; for reco rows the MINOS efficiency is evaluated in `shift`."""
         c = self.components(ev)
-        w = c["flux"] * c["nonrespi"] * c["2p2h"] * c["rpa"] * c["d2pion"] * c["lowq2pi"]
+        w = c["flux"] * c["nonrespi"] * c["2p2h"] * c["rpa"] * c["d2pion"] * c["lowq2pi"] * c["zexp"] * c["fsi"]
         return w * self.minos_eff(ev, shift)

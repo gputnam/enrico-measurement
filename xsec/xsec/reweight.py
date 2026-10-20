@@ -226,3 +226,18 @@ def lowq2pi_weight(Q2_gev2, intType, current, channel="JOINT", shift=0.0):
     w = np.interp(q2, gx, gy) + shift * np.interp(q2, sx, sy)
     apply = is_cc_res(intType, current) & (q2 >= 0) & (q2 < 0.7)
     return np.where(apply, w, 1.0)
+
+
+# ---------------------------------------------------------------- z-expansion axial form factor (MnvTune vX.4)
+def _zexp():
+    d = npz("reweight", "Z_Expansion_Reweight_v2126.npz")
+    return d["zexpvar__x"], d["zexpvar__c"][1:-1], d["zexpvar__band_zexpCov"]
+
+
+def zexp_weight(Q2_gev2, intType, universe=None):
+    """CV (universe=None) or universe z-expansion weight for CCQE; Q2 clamped at 8 GeV^2."""
+    from .flux import th1_interpolate
+    x, cv, band = _zexp()
+    q2 = np.minimum(np.asarray(Q2_gev2, dtype=float), 8.0)
+    h = cv if universe is None else band[universe]
+    return np.where(intType == 1, th1_interpolate(x, h, q2), 1.0)
