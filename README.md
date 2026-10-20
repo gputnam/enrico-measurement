@@ -10,6 +10,8 @@ xsec/          python package: weights, tunes, systematic universes, unfolding, 
 grid/          jobsub_lite scripts to run makedf over the full open data (see grid/README.md)
 measurements/  one directory per measurement (analysis.py, run.py, reference/ published data)
 outputs/       per-measurement results and STATUS.md (reproduction status)
+plot/          comparison plots with the published results (see plot/README.md)
+figures/       plot output (not tracked)
 ```
 
 ## Setup
