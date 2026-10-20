@@ -29,4 +29,21 @@ venv/bin/python measurements/ccpip_me_fhc/run.py --mc <DF dir>/me_fhc_mc --data 
 ```
 
 ## Results
-(filled after the full-statistics run)
+Full ME FHC open data (DF tag v1): 1.057e21 data POT, 4.98e21 MC POT (489 files), all universes.
+
+| variable | integral ratio | chi2 (ref + ours cov) / bins |
+|---|---|---|
+| Tpi | 0.982 | 12.9 / 10 |
+| theta_pi | 1.044 | (no published covariance parsed) |
+| p_mu | 1.029 | 0.6 / 8 |
+| p_mu,parallel | 1.030 | 1.0 / 9 |
+| pT_mu | 1.088 | 5.8 / 10 |
+| theta_mu | 1.089 | 2.9 / 15 |
+| Q2 | 1.065 | 4.2 / 12 |
+
+W-sideband background scales (CV): W 1.4-1.8 GeV 0.70, W > 1.8 GeV 1.04.
+Known residual differences: the two lowest Tpi bins (0-35 MeV) are 0.55 / 0.71 of the published
+values (1.5-2 sigma) and the high pT / Q2 / theta_mu tails are 20-70% high (within uncertainties);
+our systematic uncertainties are ~20% smaller than published.  These are consistent with the
+missing MnvTune v4.7.1 charged-pion (Tpi, Q2) and untracked-pion weights, which are not public;
+no ad-hoc substitute is applied.  Runtime 6.7 min for all 7 variables, peak RSS 1.6 GB.

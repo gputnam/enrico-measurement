@@ -36,7 +36,7 @@ Columns are listed in plain-text files (`name  branch | branch[i] | branch[:K]`)
 can change without recompiling.  Quantities that need variable-length inputs are computed in C++:
 final-state truth summary (multiplicities, sum of proton KE, leading p/pi), GENIE elastic-FSI
 fix weights, Geant hadron reweights, and the low-recoil-pion (Michel) reconstruction summary.
-Full ME FHC (11 TB of MC, 1 TB of data) -> ~35 GB of DF files.
+Full ME FHC (11 TB of MC, 1 TB of data) -> 36 GB of DF files (v1).
 
 ## Stage 2: xsec (python)
 * `flux`: FluxReweighter-equivalent weights, nu-e constraint, universes, integrals
