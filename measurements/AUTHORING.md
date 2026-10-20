@@ -16,7 +16,8 @@ selections: `ccqelike_3d_me_fhc` (proton score, Michel/blob samples, sideband fi
 
 ## Interface (see `xsec/xsec/runner.py` docstring)
 
-- `tune_name` / `tune_options`: MnvTune used for the efficiency, backgrounds and the GENIE prediction
+- `tune_name` / `tune_options`: the MINERvA simulation tune (MnvTune) used for the detector-level
+  ingredients of the extraction: efficiency, migration, backgrounds
   (`v1`, `v4.3.1`, `v4.4.1`, `v4.7.1`, `genie`; see `xsec/xsec/tunes.py`).
 - `reco_binning`, `true_binning`: `xsec.binning.Binning(edges_list, names)`; usually identical.
   The first axis varies fastest in the flattened bin order.  Keep the number of bins modest
@@ -50,6 +51,11 @@ selections: `ccqelike_3d_me_fhc` (proton score, Michel/blob samples, sideband fi
    prediction as data must recover the truth) that must be ~1, an efficiency, and the fractional
    uncertainty.  Bins with total fractional uncertainty >= 100% are ignored by the corpus metrics.
 4. **ME FHC only** (numu, 1.057e21 POT).  The flux normalisation is the standard 0-100 GeV integral.
+5. **Compare only with the model under study.**  The simulation's own truth-level prediction (GENIE /
+   MnvTune) is an extraction tool, not a benchmark: `run_measurement.py` strips it from the result
+   (it goes to the human-only store), and the corpus carries only data and the model.  Do not compute,
+   print or quote it (e.g. from the accumulators), nor other generators' predictions from
+   `reference/` files or papers, as a target for the model.
 
 ## Running
 

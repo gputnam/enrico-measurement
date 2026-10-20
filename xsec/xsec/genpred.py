@@ -3,8 +3,8 @@
 A nuflow ROOT file (`events` + `run` trees, see model/README.md) is converted into a pandas
 dataframe with the same *truth* columns the makedf DFs carry (mc_*, tfs_*, t_*), in the same
 units (MeV, mm, detector frame).  A measurement's own `signal(ev)` and `truth(ev)` are then
-evaluated on it, so the generator and the MINERvA GENIE prediction (`truth_xsec`) use one
-signal definition and one binning.
+evaluated on it, so the generator prediction uses exactly the signal definition and binning of the
+measurement.
 
 Normalisation (unweighted or weighted events, per nucleon of the CH target):
     dsigma/dX [cm^2/nucleon/unit] = flux_avg_xsec * 1e-38 / nucleons_per_target

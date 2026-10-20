@@ -16,7 +16,7 @@ PMU = [1.5, 2, 2.5, 3, 3.5, 4, 5, 6, 8, 10, 15, 20]  # GeV/c
 
 class TemplateMeasurement(Measurement):
     name = "_template"
-    tune_name = "v1"          # MnvTune used for the efficiency/background model and the GENIE prediction
+    tune_name = "v1"          # MnvTune for the efficiency/migration/background model
     n_iter = 4                 # D'Agostini iterations
     fv = (ZMIN, ZMAX, APOTHEM)  # fiducial volume for the target count
     samples = ("sel",)

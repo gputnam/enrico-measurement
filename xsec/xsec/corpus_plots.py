@@ -1,6 +1,7 @@
 """Human-facing comparison plots for corpus entries: data vs MINERvA GENIE vs the generator model.
 
-Not read by the loop agents.  For every entry:
+Human-only: never read by the loop agents (they also show the MINERvA GENIE prediction, which the
+agents must not see).  For every entry:
   projections.png   dsigma/d(axis) for every binning axis (other axes integrated), with ratio to data
   slices_<k>.png    (ndim >= 2) panels of axis 0 in bins of axis 1, one figure per bin of the
                     remaining axes
@@ -50,20 +51,33 @@ def _pair(fig, spec):
     return a, b
 
 
-def _stats_line(met, model_version):
+def _stats_line(met, model_version, genie_chi2=None):
     out = []
-    for k, lab in (("model", f"model {model_version}"), ("genie", "GENIE")):
-        if k in met:
-            m = met[k]
-            out.append(f"{lab}: χ² {m['chi2']:.0f}/{m['ndf']}, norm {m['norm_ratio']:.2f}")
+    if "model" in met:
+        m = met["model"]
+        out.append(f"model {model_version}: χ² {m['chi2']:.0f}/{m['ndf']}, norm {m['norm_ratio']:.2f}")
+    if genie_chi2 is not None:
+        out.append(f"GENIE: χ² {genie_chi2[0]:.0f}/{genie_chi2[1]}, norm {genie_chi2[2]:.2f}")
     return "    ".join(out)
 
 
-def plot_entry(entry, TB, x, e_stat, e_tot, genie, model, cov, met, model_version, outdir):
-    from .corpus import axis_projection
+def plot_entry(entry, TB, x, e_stat, e_tot, genie, genie_label, model, cov, met, model_version, outdir):
+    """genie (MINERvA GENIE prediction from the private store) may be None."""
+    from .compare import chi2
+    from .corpus import axis_projection, valid_bins
     os.makedirs(outdir, exist_ok=True)
-    title = f"{entry['id']}: {entry.get('title', '')}\n{_stats_line(met, model_version)}"
-    preds = lambda P, g, m: [(met.get("genie_label", "GENIE"), GENIE, P @ g), (f"model {model_version}", MODEL, P @ m)]
+    gchi2 = None
+    if genie is not None:
+        used = valid_bins(x, cov)
+        vol = TB.widths()
+        c2, ndf = chi2(genie, x, cov, used)
+        gchi2 = (c2, ndf, float((genie * vol)[used].sum() / (x * vol)[used].sum()))
+    title = f"{entry['id']}: {entry.get('title', '')}\n{_stats_line(met, model_version, gchi2)}"
+    glabel = genie_label or "MINERvA GENIE"
+
+    def preds(P, g, m):
+        out = [] if g is None else [(glabel, GENIE, P @ g)]
+        return out + [(f"model {model_version}", MODEL, P @ m)]
     # projections
     nd = TB.ndim
     fig = plt.figure(figsize=(4.6 * nd, 4.4))
@@ -100,8 +114,8 @@ def plot_entry(entry, TB, x, e_stat, e_tot, genie, model, cov, met, model_versio
             ii = np.flatnonzero(sel)
             ii = ii[np.argsort(idx[0][ii])]
             a, b = _pair(fig, gs[j // ncol, j % ncol])
-            _draw(a, b, TB.edges[0], x[ii], e_tot[ii], [(met.get("genie_label", "GENIE"), GENIE, genie[ii]),
-                                                         (f"model {model_version}", MODEL, model[ii])], e_stat[ii])
+            sel_preds = ([] if genie is None else [(glabel, GENIE, genie[ii])]) + [(f"model {model_version}", MODEL, model[ii])]
+            _draw(a, b, TB.edges[0], x[ii], e_tot[ii], sel_preds, e_stat[ii])
             a.set_title(f"{TB.names[1]}∈[{TB.edges[1][j]:.3g},{TB.edges[1][j + 1]:.3g}]", fontsize=8)
             b.set_xlabel(TB.names[0])
             if j == 0:

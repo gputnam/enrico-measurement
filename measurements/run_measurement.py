@@ -13,6 +13,9 @@ tracker FV (5980, 8422, 850).
 
 --max-files N uses only the first N MC and N data DF files per playlist (fast development; the
 normalisation is still correct since POT is counted per file, but statistics are poor).
+The MC truth prediction of the tune (`truth_xsec`, i.e. MINERvA GENIE) is removed from the saved
+result and, if --private (default $MVA_PRIVATE) is given, stored there for the human-only plots.
+In the closed loop the measurement is compared with the model under study only.
 Closure: the printed closure ratio (extract with data := MC prediction, compared with the truth
 prediction) must be ~1 in every bin with sizeable efficiency.
 """
@@ -26,6 +29,7 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 from xsec import io  # noqa: E402
+from xsec.corpus import GENIE_LABEL, store_genie  # noqa: E402
 from xsec.extract import extract  # noqa: E402
 from xsec.runner import run  # noqa: E402
 from xsec.tunes import Tune  # noqa: E402
@@ -54,6 +58,8 @@ def main():
     ap.add_argument("--max-files", type=int, default=0)
     ap.add_argument("--load", action="store_true", help="reuse saved accumulators")
     ap.add_argument("--ids", nargs="*")
+    ap.add_argument("--private", default=os.environ.get("MVA_PRIVATE"),
+                    help="human-only directory for the MC-truth (GENIE) prediction")
     args = ap.parse_args()
     mod = load_measurement_module(args.measurement)
     entries = json.load(open(os.path.join(HERE, args.measurement, "corpus.json")))
@@ -83,14 +89,17 @@ def main():
         kw = dict(n_iter=None, bkg_scales=scales, zmin=zmin, zmax=zmax, apothem=apothem)
         res = extract(acc, meas, info, **kw)
         clo = extract(acc, meas, info, closure=True, **kw)
+        truth = res.pop("truth_xsec")
+        if args.private:
+            store_genie(args.private, e["id"], truth, GENIE_LABEL.format(tune=meas.tune_name))
         with open(out, "wb") as f:
             pickle.dump(res, f)
-        x, t, s = res["xsec"], res["truth_xsec"], np.sqrt(np.clip(np.diag(res["cov_total"]), 0, None))
+        x, s = res["xsec"], np.sqrt(np.clip(np.diag(res["cov_total"]), 0, None))
         good = (clo["truth_xsec"] > 0) & (clo["eff"] > 0.02)
         cr = clo["xsec"][good] / clo["truth_xsec"][good]
-        vol = meas.true_binning.widths()
-        print(f"{e['id']}: {len(x)} bins, data/GENIE integral {(x * vol).sum() / (t * vol).sum():.3f}, "
-              f"median frac. unc. {np.median(s[x > 0] / x[x > 0]):.3f}, "
+        pos = x > 0
+        print(f"{e['id']}: {len(x)} bins, median frac. unc. {np.median(s[pos] / x[pos]):.3f} "
+              f"(bins with < 100%: {(s < np.abs(x)).sum()}), "
               f"closure ratio median {np.median(cr):.4f} min {cr.min():.3f} max {cr.max():.3f} "
               f"(bins with eff > 2%: {good.sum()}), efficiency median {np.median(res['eff']):.3f}")
         print(f"   wrote {out}")

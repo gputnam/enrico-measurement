@@ -82,9 +82,11 @@ Results go to `outputs/<measurement>/` (default `-o`; not tracked except `STATUS
 
 - `xsec/xsec/genpred.py` evaluates a nuflow generator file in any measurement's own `signal()` /
   `truth()` and `true_binning` (generator final states are converted to the DF truth columns), giving
-  a model prediction in the same units as `xsec` and `truth_xsec` (the MINERvA GENIE/MnvTune prediction).
+  a model prediction in the same units as `xsec`.
 - `xsec/xsec/export_flux.py` writes the flux the cross sections are normalised to (for the generator).
-- `xsec/xsec/corpus.py` (`python -m xsec.corpus add|predict|summary`) maintains a *corpus*: per
+- `xsec/xsec/corpus.py` (`python -m xsec.corpus add|predict|summary`) maintains a *corpus* containing only
+  data and the model under study (the MINERvA GENIE prediction `truth_xsec` is moved to a human-only
+  `--private` store and appears only in the human plots): per
   measurement `definition.md`, `result.npz`, `comparison.txt`, `projections.txt`, `metrics.json`, and a
   `summary.txt`; `xsec/xsec/corpus_plots.py` makes the human-facing plots.
 - Each measurement declares its corpus entries in `measurements/<m>/corpus.json`;
