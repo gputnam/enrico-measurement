@@ -9,37 +9,42 @@ O_s is the sum of unfitted categories.  Returns {category: (R, U) scale} for the
 import numpy as np
 
 
-def fit_scales(acc, meas, cell_of_bin, fit_cats, samples=None, rcond=1e-3, keep=None):
+def fit_scales(acc, meas, cell_of_bin, fit_cats, samples=None, rcond=1e-3, keep=None, point_of_bin=None):
     """cell_of_bin: (R,) int cell id per reco global bin (-1 = not fitted, scale 1).
-    keep: optional (R,) bool, reco bins that enter the cell sums (default all with cell >= 0)."""
+    keep: optional (R,) bool, reco bins that enter the cell sums (default all with cell >= 0).
+    point_of_bin: optional (R,) int; reco bins of a cell with different point ids enter the fit as
+    separate data points (e.g. p|| bins), otherwise each sample is one point per cell."""
     samples = samples or meas.samples
     R, U = acc[f"sig/{samples[0]}"].shape
     ncell = cell_of_bin.max() + 1
     use = cell_of_bin >= 0 if keep is None else (cell_of_bin >= 0) & keep
+    pt = np.zeros(R, dtype=int) if point_of_bin is None else np.asarray(point_of_bin)
+    P = pt[use].max() + 1
 
-    def cellsum(h):  # (R,) or (R,U) -> (ncell,) / (ncell,U)
-        idx = cell_of_bin[use]
+    def cellsum(h):  # (R,) or (R,U) -> (ncell,P) / (ncell,U,P)
+        idx = cell_of_bin[use] * P + pt[use]
         if h.ndim == 1:
-            return np.bincount(idx, weights=h[use], minlength=ncell)
-        out = np.zeros((ncell, h.shape[1]))
+            return np.bincount(idx, weights=h[use], minlength=ncell * P).reshape(ncell, P)
+        out = np.zeros((ncell * P, h.shape[1]))
         np.add.at(out, idx, h[use])
-        return out
+        return out.reshape(ncell, P, -1).transpose(0, 2, 1)
 
     S, C = len(samples), len(fit_cats)
-    T = np.zeros((ncell, U, S, C))
-    Y = np.zeros((ncell, U, S))
-    Wt = np.zeros((ncell, S))
+    T = np.zeros((ncell, U, S * P, C))
+    Y = np.zeros((ncell, U, S * P))
+    Wt = np.zeros((ncell, S * P))
     for i, s in enumerate(samples):
+        sl = slice(i * P, (i + 1) * P)
         d = cellsum(acc[f"data/{s}"])
-        Wt[:, i] = 1.0 / np.sqrt(np.maximum(d, 1.0))
-        other = np.zeros((ncell, U))
+        Wt[:, sl] = 1.0 / np.sqrt(np.maximum(d, 1.0))
+        other = np.zeros((ncell, U, P))
         for c in meas.bkg_categories:
             if c not in fit_cats:
                 other += cellsum(acc[f"bkg/{s}/{c}"])
-        Y[:, :, i] = d[:, None] - other
+        Y[:, :, sl] = d[:, None, :] - other
         for j, c in enumerate(fit_cats):
             key = f"sig/{s}" if c == "signal" else f"bkg/{s}/{c}"
-            T[:, :, i, j] = cellsum(acc[key])
+            T[:, :, sl, j] = cellsum(acc[key])
     A = T * Wt[:, None, :, None]
     b = Y * Wt[:, None, :]
     u_, sv, vt = np.linalg.svd(A, full_matrices=False)  # (ncell,U,S,C), (ncell,U,C), (ncell,U,C,C)

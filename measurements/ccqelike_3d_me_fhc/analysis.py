@@ -8,7 +8,12 @@ in the tracker FV, theta_mu < 20 deg, p|| > 1.5 GeV/c.  SumTp = summed true prot
 Reco: MINOS-matched mu- in FV, theta < 20 deg, <= 1 dead discriminator; every non-muon
 track proton-like by dE/dx (Q2QE-dependent proton-score cut, CCQENu default).
 Samples (Michel x isolated blobs): A (0, <=1) signal, B (>=1, <=1), C (0, >=2), D (>=1, >=2).
-Reco SumTp proxy: calorimetric visible recoil (nonvtx_iso_blobs_energy + dispr_id_energy).
+Isolated blobs: start z > 4750 mm and < 10 MeV per hit (denser clusters are neutron-induced
+protons; the PRL wording is inverted, but this choice reproduces the published sample sizes
+A 1.3M / B 0.23M / C 0.22M / D 57k to ~5%).
+Recoil (non-vertex: nonvtx_iso_blobs_energy + dispr_id_energy) < 500 MeV, as in PRD 99 012004.
+Reco SumTp proxy: calorimetric available energy as in MAT GetEAvailable,
+1.17 x (blob_recoil_E_tracker + blob_recoil_E_ecal), which includes tracked protons and vertex energy.
 """
 import numpy as np
 
@@ -22,6 +27,9 @@ PT = [0, 0.075, 0.15, 0.25, 0.325, 0.4, 0.475, 0.55, 0.7, 0.85, 1.0, 2.5]
 PZ = [1.5, 3.5, 4.5, 7.0, 8.0, 10.0, 20.0]
 ZMIN, ZMAX, APOTHEM = 5980.0, 8422.0, 850.0
 BLOB_ZMIN = 4750.0
+BLOB_MAX_E_PER_HIT = 10.0  # MeV
+RECOIL_MAX = 0.5  # GeV
+EAVAIL_SCALE = 1.17  # MAT LowRecoilFunctions Eavailable_scale
 NBLOB_SLOTS = 5
 NSECP_SLOTS = 6
 # CCQENu default proton score bands: Q2QE < 0.2 -> score > 0.2; [0.2, 0.6) -> 0.1; >= 0.6 -> 0.0
@@ -46,10 +54,14 @@ class QELike3D(Measurement):
     reco_binning = Binning([SUMTP, PT, PZ], ["sumtp", "pt", "pz"])
     true_binning = Binning([SUMTP, PT, PZ], ["sumtp", "pt", "pz"])
     extra_reco_columns = (["nu_helicity", "multiplicity", "n_improved_michel", "n_isoblob_prong",
-                           "nonvtx_iso_blobs_E", "dispr_id_E", "p_score", "n_secp"]
+                           "nonvtx_iso_blobs_E", "dispr_id_E", "p_score", "n_secp",
+                           "blob_recoil_trk", "blob_recoil_ecal"]
                           + [f"isoblob_z_{i}" for i in range(NBLOB_SLOTS)]
+                          + [f"isoblob_E_{i}" for i in range(NBLOB_SLOTS)]
+                          + [f"isoblob_nhits_{i}" for i in range(NBLOB_SLOTS)]
                           + [f"secp_score_{i}" for i in range(NSECP_SLOTS)])
-    extra_mc_reco_columns = [f"rerr_dispr_{p}" for p in ("proton", "meson", "em", "other")]
+    extra_mc_reco_columns = ([f"rerr_dispr_{p}" for p in ("proton", "meson", "em", "other")]
+                             + [f"rerr_all_{p}" for p in ("proton", "meson", "em", "other")])
     extra_truth_columns = ["tfs_np", "tfs_npip", "tfs_npim", "tfs_npi0", "tfs_nkpm", "tfs_nk0", "tfs_nomeson",
                            "tfs_nhbaryon", "tfs_maxgammaE", "tfs_nlep", "tfs_sumTp", "w_fsi_elastic"]
 
@@ -68,7 +80,8 @@ class QELike3D(Measurement):
         cnt = np.zeros(len(ev), dtype=int)
         for i in range(NBLOB_SLOTS):
             z = ev[f"isoblob_z_{i}"]
-            cnt += ((i < n) & (z > BLOB_ZMIN)).astype(int)
+            eph = ev[f"isoblob_E_{i}"] / np.maximum(ev[f"isoblob_nhits_{i}"], 1)
+            cnt += ((i < n) & (z > BLOB_ZMIN) & (eph < BLOB_MAX_E_PER_HIT)).astype(int)
         return cnt + np.maximum(n - NBLOB_SLOTS, 0)  # beyond the stored slots: assume in tracker
 
     def protons_ok(self, ev, mu):
@@ -92,14 +105,21 @@ class QELike3D(Measurement):
         michel = ev["n_improved_michel"] > 0
         blobs = self.n_blobs(ev) >= 2
         recoil = (ev["nonvtx_iso_blobs_E"] + ev["dispr_id_E"] + recoil_shift(ev, shift, "rerr_dispr_")) / 1000.0
+        base = base & (recoil < RECOIL_MAX)
         samples = {"A": base & ~michel & ~blobs, "B": base & michel & ~blobs,
                    "C": base & ~michel & blobs, "D": base & michel & blobs}
-        return (recoil, mu["pt"] / 1000.0, mu["pz"] / 1000.0), samples
+        return (self.eavail(ev, shift), mu["pt"] / 1000.0, mu["pz"] / 1000.0), samples
+
+    def eavail(self, ev, shift):
+        e = np.maximum(ev["blob_recoil_trk"], 0.0) + np.maximum(ev["blob_recoil_ecal"], 0.0)
+        return EAVAIL_SCALE * (e + recoil_shift(ev, shift, "rerr_all_")) / 1000.0
 
     # ------------------------------------------------------------ truth
     def truth(self, ev):
         t = ev.true_muon()
-        return ev["tfs_sumTp"] / 1000.0, t["pt"] / 1000.0, t["pz"] / 1000.0
+        # clamp: v1 DFs carry -O(keV) SumTp for protons at rest (mass rounding), which would fall in
+        # the underflow instead of the first SumTp bin
+        return np.maximum(ev["tfs_sumTp"], 0.0) / 1000.0, t["pt"] / 1000.0, t["pz"] / 1000.0
 
     def qelike_fs(self, ev):
         return ((ev["tfs_npip"] + ev["tfs_npim"] + ev["tfs_npi0"] + ev["tfs_nkpm"] + ev["tfs_nk0"]
@@ -131,8 +151,12 @@ def fit_cells(binning):
     return cell, keep
 
 
-def background_scales(acc, meas):
+def background_scales(acc, meas, pz_points=True):
+    """pz_points: in-range p|| bins of a (SumTp, pT) cell are separate fit points (PRL); False
+    integrates over p|| (one point per sample and cell, LE/ME paper)."""
     from xsec.sideband import fit_scales
     cell, keep = fit_cells(meas.reco_binning)
-    scales, coef = fit_scales(acc, meas, cell, meas.fit_categories, keep=keep)
+    sx, sy, _ = meas.reco_binning.shape
+    point = np.arange(meas.reco_binning.size) // (sx * sy) if pz_points else None
+    scales, coef = fit_scales(acc, meas, cell, meas.fit_categories, keep=keep, point_of_bin=point)
     return {c: v for c, v in scales.items() if c != "signal"}, coef

@@ -65,13 +65,13 @@ void TruthSummary::compute() {
     const int apdg = std::abs(pdg);
     const double E = fE->get(i), px = fPx->get(i), py = fPy->get(i), pz = fPz->get(i);
     if (pdg == 2212) {
-      const double T = E - kMp;
+      const double T = std::max(E - kMp, 0.0);  // protons at rest: avoid -O(keV) rounding below 0
       ++n_p; sum_Tp += T; eavail += T;
       if (T > 120) ++n_p_120;
       protons.push_back({T, px, py, pz, pdg});
       if (E > lead_nucleon_E) { lead_nucleon_E = E; lead_nucleon_pdg = pdg; }
     } else if (pdg == 2112) {
-      ++n_n; sum_Tn += E - kMn;
+      ++n_n; sum_Tn += std::max(E - kMn, 0.0);
       if (E > lead_nucleon_E) { lead_nucleon_E = E; lead_nucleon_pdg = pdg; }
     } else if (apdg == 211) {
       if (pdg > 0) ++n_pip; else ++n_pim;

@@ -62,9 +62,11 @@ def covariance_from_universes(x, universes, cv=None):
 
 
 def extract(acc, meas, info, n_iter=None, bkg_scales=None, zmin=5980.0, zmax=8422.0, apothem=850.0,
-            emin=0.0, emax=100.0, closure=False):
+            emin=0.0, emax=100.0, closure=False, clip_negative=True):
     """closure=True: replace data by the CV MC prediction (signal + backgrounds) and also return
-    the generator-level cross section from the truth tree ('truth_xsec') for comparison."""
+    the generator-level cross section from the truth tree ('truth_xsec') for comparison.
+    clip_negative: set negative background-subtracted bins to 0 before unfolding (D'Agostini
+    assumes non-negative counts; negative inputs make the iteration unstable)."""
     universes, tune = info["universes"], info["tune"]
     RB, TB = meas.reco_binning, meas.true_binning
     n_iter = meas.n_iter if n_iter is None else n_iter
@@ -75,6 +77,8 @@ def extract(acc, meas, info, n_iter=None, bkg_scales=None, zmin=5980.0, zmax=842
         data = acc[f"sig/{s}"][:, 0] + background_total(acc, meas, s)[:, 0]
     B = background_total(acc, meas, s, bkg_scales)
     N = data[:, None] - B
+    if clip_negative:
+        N = np.clip(N, 0.0, None)
     mig = acc["mig"]
     if "mig_u" in acc:
         Uall = np.column_stack([unfold(N[:, u], acc["mig_u"].dense(mig.shape, u), n_iter) for u in range(N.shape[1])])
