@@ -56,9 +56,10 @@ def main():
     ap.add_argument("--mc", nargs="*", default=[])
     ap.add_argument("--data", nargs="*", default=[])
     ap.add_argument("-j", "--workers", type=int, default=16)
-    ap.add_argument("-o", "--output", default=os.path.join(HERE, "results.pkl"))
+    ap.add_argument("-o", "--output", default=os.path.join(HERE, "..", "..", "outputs", os.path.basename(HERE), "results.pkl"))
     ap.add_argument("--load")
     args = ap.parse_args()
+    os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)
     meas = QELike3DLEBinning()
     if args.load:
         with open(args.load, "rb") as f:

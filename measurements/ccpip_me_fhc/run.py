@@ -48,7 +48,7 @@ def main():
     ap.add_argument("--data", nargs="*", default=[])
     ap.add_argument("-j", "--workers", type=int, default=16)
     ap.add_argument("--vars", nargs="*", default=list(VARIABLES))
-    ap.add_argument("-o", "--outdir", default=os.path.join(HERE, "results"))
+    ap.add_argument("-o", "--outdir", default=os.path.join(HERE, "..", "..", "outputs", os.path.basename(HERE), "results"))
     ap.add_argument("--load-dir")
     ap.add_argument("--no-fit", action="store_true")
     args = ap.parse_args()

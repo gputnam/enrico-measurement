@@ -8,7 +8,10 @@ makedf/build/
 *.npz
 *.parquet
 *.h5
-outputs/
+/outputs/*
+!/outputs/*/
+/outputs/*/*
+!/outputs/*/STATUS.md
 joblists/
 !measurements/*/reference/*.root
 measurements/ccqelike_3d_me_fhc/reference/*covariances_underoverbinsremoved.csv

@@ -73,11 +73,12 @@ def main():
     ap.add_argument("--mc", nargs="*", default=[])
     ap.add_argument("--data", nargs="*", default=[])
     ap.add_argument("-j", "--workers", type=int, default=16)
-    ap.add_argument("-o", "--output", default=os.path.join(HERE, "results.pkl"))
+    ap.add_argument("-o", "--output", default=os.path.join(HERE, "..", "..", "outputs", os.path.basename(HERE), "results.pkl"))
     ap.add_argument("--load")
     ap.add_argument("--mat-signal", action="store_true", help="MINERvA-101 efficiency-numerator convention")
     ap.add_argument("--iter", type=int, default=None)
     args = ap.parse_args()
+    os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)
     meas = CCInclusive2D(mat_signal_convention=args.mat_signal)
     if args.load:
         with open(args.load, "rb") as f:

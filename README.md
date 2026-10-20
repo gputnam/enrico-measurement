@@ -9,6 +9,7 @@ makedf/        C++ (ROOT only) dataframe producer: AnaTuples -> flat, preselecte
 xsec/          python package: weights, tunes, systematic universes, unfolding, extraction
 grid/          jobsub_lite scripts to run makedf over the full open data (see grid/README.md)
 measurements/  one directory per measurement (analysis.py, run.py, reference/ published data)
+outputs/       per-measurement results and STATUS.md (reproduction status)
 ```
 
 ## Setup
@@ -63,3 +64,14 @@ Full ME FHC (11 TB of MC, 1 TB of data) -> 36 GB of DF files (v1).
 Each `run.py --mc <DF dir> --data <DF dir> -j 16` runs the event loop, extracts the cross
 section with all universes and prints comparisons (ratios, chi2 with the published covariance,
 uncertainty breakdown) to the published result.
+
+Results go to `outputs/<measurement>/` (default `-o`; not tracked except `STATUS.md`):
+`v1/` holds the final full-statistics run on DF tag v1, `dev/` superseded development runs, and
+`STATUS.md` summarizes the reproduction status.
+
+| measurement | status |
+|---|---|
+| `ccinc_2d_me_fhc` | reproduced (chi2 4.5/205, integral 0.998, `--mat-signal`) |
+| `ccqelike_3d_me_fhc` | reproduced (integral 0.998, uncertainties match) |
+| `ccqelike_3d_le_me_fhc` | partial: ME consistent with PRL; no numerical release; LE samples unreleased |
+| `ccpip_me_fhc` | largely reproduced; low-Tpi residuals from non-public MnvTune v4.7.1 weights |
