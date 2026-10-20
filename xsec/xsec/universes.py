@@ -143,8 +143,16 @@ def _muon_minos_flux(sign):
     return f
 
 
+def _geant(particle, sign):
+    col = f"geant_{particle}_{'up' if sign > 0 else 'dn'}"
+
+    def f(ev, tune):
+        return ev[col].astype(np.float64) if ev.has(col) else np.ones(len(ev))
+    return f
+
+
 def standard_universes(tune, genie=True, flux=True, rpa=True, twop2h=True, muon=True, minos_eff=True,
-                       beam_angle=True, muon_angle_res=False, target_mass=True, n_flux=None):
+                       beam_angle=True, muon_angle_res=False, target_mass=True, geant=True, n_flux=None):
     """MINERvA-101-like standard set (no response / Geant bands)."""
     U = [Universe("CV", 0, "cv")]
     if flux:
@@ -194,6 +202,10 @@ def standard_universes(tune, genie=True, flux=True, rpa=True, twop2h=True, muon=
             U.append(Universe("MuonAngleXResolution", j, "lat", shift=Shift(f"AXR{s:+d}", angx_res_nsig=s)))
         for j, s in enumerate((-1, 1)):
             U.append(Universe("MuonAngleYResolution", j, "lat", shift=Shift(f"AYR{s:+d}", angy_res_nsig=s)))
+    if geant:
+        for band, part in (("GEANT_Proton", "p"), ("GEANT_Neutron", "n"), ("GEANT_Pion", "pi")):
+            for j, s in enumerate((-1, 1)):
+                U.append(Universe(band, j, "vert", ratio=_geant(part, s)))
     if target_mass:
         for j, s in enumerate((-1, 1)):
             U.append(Universe("Target_Mass_CH", j, "norm", norm={"targets": 1 + s * TARGET_MASS_ERR_CH}))

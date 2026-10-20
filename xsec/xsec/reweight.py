@@ -241,3 +241,19 @@ def zexp_weight(Q2_gev2, intType, universe=None):
     q2 = np.minimum(np.asarray(Q2_gev2, dtype=float), 8.0)
     h = cv if universe is None else band[universe]
     return np.where(intType == 1, th1_interpolate(x, h, q2), 1.0)
+
+
+# ---------------------------------------------------------------- coherent pion reweight (MnvTune vX.1-3)
+def coh_weight(theta_deg, tpi_gev, intType):
+    """weightCoherentPi::get_combined_weight (theta in deg, pion KE in GeV), COH events only."""
+    d = npz("reweight", "cohPi_weights_tracker_ME.npz")
+    ex, ec = d["h1d_epi_xsec_ratio__x"], d["h1d_epi_xsec_ratio__c"]
+    tx, tc = d["h1d_theta_xsec_ratio__x"], d["h1d_theta_xsec_ratio__c"]
+
+    def content(edges, c, x):  # GetBinContent(FindBin(x)) incl. under/overflow
+        return c[np.clip(np.searchsorted(edges, x, side="right"), 0, len(c) - 1)]
+    th, e = np.asarray(theta_deg, float), np.asarray(tpi_gev, float)
+    we, wt = content(ex, ec, e), content(tx, tc, th)
+    hi_t, hi_e = th > tx[-1], e > ex[-1]
+    w = np.where(hi_t & hi_e, 1.0, np.where(hi_t, we, np.where(hi_e, wt, we * wt)))
+    return np.where(intType == 4, w, 1.0)

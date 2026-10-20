@@ -54,8 +54,9 @@ def report(res, meas):
     for name, ours in (("stat", res["cov_stat"]), ("flux", res["cov_bands"].get("Flux")), ("total", res["cov_total"])):
         if ours is None:
             continue
-        fr_ours = np.sqrt(np.diag(ours))[mask] / x[mask]
-        fr_ref = np.sqrt(np.diag(rcov[name]))[mask] / ref[mask]
+        good = mask & (x > 0)
+        fr_ours = np.sqrt(np.clip(np.diag(ours), 0, None))[good] / x[good]
+        fr_ref = np.sqrt(np.diag(rcov[name]))[good] / ref[good]
         print(f"frac. unc. {name:<6} ours median {np.median(fr_ours):.4f}  ref median {np.median(fr_ref):.4f}  "
               f"median ratio {np.median(fr_ours / fr_ref):.3f}")
     npt = len(PT) - 1

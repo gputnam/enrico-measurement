@@ -9,6 +9,10 @@ A measurement object provides
     truth(ev) -> vars                    (true kinematics; reco and truth rows)
     signal(ev) -> mask                   (signal definition incl. phase space)
     category(ev) -> int array            (background category index for non-signal)
+optional:
+    extra(ev, shift) -> {name: (Binning, vars tuple, mask)}
+        additional reco histograms (e.g. sideband fit distributions), filled for data
+        ("x/<name>/data") and MC per universe ("x/<name>/sig", "x/<name>/bkg/<cat>")
 MC histograms are scaled per playlist to the data POT of that playlist.
 """
 import multiprocessing as mp
@@ -70,6 +74,14 @@ def process_mc(path, playlist, scale):
                     _scatter(acc, "effnum", fill(TB.size, t_idx[ms], w[ms]), cols, U)
                     if shift is CV:
                         acc.add("mig", fill2d(RB.size, TB.size, r_idx[ms], t_idx[ms], w_cv[ms]))
+            if hasattr(meas, "extra"):
+                for name, (B, xv, m) in meas.extra(ev, shift).items():
+                    idx = B.index(*xv)
+                    ms = m & sig
+                    _scatter(acc, f"x/{name}/sig", fill(B.size, idx[ms], w[ms]), cols, U)
+                    for ic, cname in enumerate(meas.bkg_categories):
+                        mb = m & ~sig & (cat == ic)
+                        _scatter(acc, f"x/{name}/bkg/{cname}", fill(B.size, idx[mb], w[mb]), cols, U)
     # ---------------- truth rows
     dft = io.load(path, "truth", meas.truth_columns)
     evt = Event(dft, True, playlist, is_truth=True)
@@ -103,6 +115,9 @@ def process_data(path, playlist):
         r_idx = RB.index(*rv)
         for s, m in samples.items():
             acc.add(f"data/{s}", fill(RB.size, r_idx[m], np.ones(m.sum())))
+        if hasattr(meas, "extra"):
+            for name, (B, xv, m) in meas.extra(ev, CV).items():
+                acc.add(f"x/{name}/data", fill(B.size, B.index(*xv)[m], np.ones(m.sum())))
     return acc
 
 

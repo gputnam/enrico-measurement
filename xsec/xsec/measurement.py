@@ -16,6 +16,7 @@ GENIE_KNOBS = ["AGKYxF1pi", "AhtBY", "BhtBY", "CCQEPauliSupViaKF", "CV1uBY", "CV
                "NormCCRES", "NormDISCC", "NormNCRES", "RDecBR1gamma", "Rvn1pi", "Rvn2pi", "Rvp1pi", "Rvp2pi",
                "Theta_Delta2Npi", "VecFFCCQEshape"]
 GENIE_COLUMNS = [f"g_{k}_{s}" for k in GENIE_KNOBS for s in ("m1", "p1")]
+GEANT_COLUMNS = [f"geant_{p}_{s}" for p in ("p", "n", "pi") for s in ("dn", "up")] + ["geant_neutron_cv", "w_fsi_elastic"]
 
 
 class Measurement:
@@ -43,7 +44,7 @@ class Measurement:
 
     @property
     def truth_columns(self):
-        return sorted(set(TRUTH_COLUMNS + GENIE_COLUMNS + self.extra_truth_columns))
+        return sorted(set(TRUTH_COLUMNS + GENIE_COLUMNS + GEANT_COLUMNS + self.extra_truth_columns))
 
     def universes(self, tune):
         return standard_universes(tune)

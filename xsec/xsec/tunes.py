@@ -14,9 +14,10 @@ from .flux import MuonEnergyFluxCorrection, flux_model
 
 TUNES = {
     "v1": dict(d2pion=False, lowq2pi=False),
-    "v4.3.1": dict(d2pion=True, lowq2pi=True),
-    "v4.4.1": dict(d2pion=True, lowq2pi=False, zexp=True),
-    "v4.7.1": dict(d2pion=True, lowq2pi=True),
+    "v4.3.1": dict(d2pion=True, lowq2pi=True, coh=True, fsi_elastic=True),
+    "v4.4.1": dict(d2pion=True, lowq2pi=False, zexp=True, fsi_elastic=True),
+    # v4.7.1 = v4.3.1 x (Tpi, Q2) 1pi weight, which is not publicly available -> same as v4.3.1 here
+    "v4.7.1": dict(d2pion=True, lowq2pi=True, coh=True, fsi_elastic=True),
     "genie": dict(nonrespi=False, twop2h=False, rpa=False, d2pion=False, lowq2pi=False),
 }
 
@@ -24,7 +25,7 @@ TUNES = {
 class Tune:
     def __init__(self, name="v1", nu_pdg=14, nue_constraint=True, n_flux_universes=100, neutrino=True, **over):
         cfg = dict(nonrespi=True, twop2h=True, rpa=True, minos_eff=True, d2pion=False, lowq2pi=False, zexp=False,
-                   fsi_elastic=False)
+                   fsi_elastic=False, geant_neutron_cv=False, coh=False)
         cfg.update(TUNES[name])
         cfg.update(over)
         self.name, self.cfg = name, cfg
@@ -87,6 +88,15 @@ class Tune:
                         if self.cfg["lowq2pi"] else np.ones(len(ev)))
         c["zexp"] = rw.zexp_weight(ev["mc_Q2"] / 1e6, it) if self.cfg["zexp"] else np.ones(len(ev))
         c["fsi"] = ev["w_fsi_elastic"] if self.cfg["fsi_elastic"] else np.ones(len(ev))
+        if self.cfg["coh"]:
+            px, py, pz = ev["tfs_pi_px_0"], ev["tfs_pi_py_0"], ev["tfs_pi_pz_0"]
+            from .kinematics import rotate_to_beam
+            px, py, pz = rotate_to_beam(px, py, pz)
+            th = np.degrees(np.arccos(np.clip(pz / np.sqrt(px * px + py * py + pz * pz), -1, 1)))
+            c["coh"] = rw.coh_weight(np.nan_to_num(th, nan=0.0), np.nan_to_num(ev["tfs_pi_T_0"] / 1000.0, nan=0.0), it)
+        else:
+            c["coh"] = np.ones(len(ev))
+        c["geant_ncv"] = ev["geant_neutron_cv"] if self.cfg["geant_neutron_cv"] else np.ones(len(ev))
         ev._cache["tune"] = c
         return c
 
@@ -101,5 +111,5 @@ class Tune:
     def cv_weight(self, ev, shift=None):
         """CV weight; for reco rows the MINOS efficiency is evaluated in `shift`."""
         c = self.components(ev)
-        w = c["flux"] * c["nonrespi"] * c["2p2h"] * c["rpa"] * c["d2pion"] * c["lowq2pi"] * c["zexp"] * c["fsi"]
+        w = c["flux"] * c["nonrespi"] * c["2p2h"] * c["rpa"] * c["d2pion"] * c["lowq2pi"] * c["zexp"] * c["fsi"] * c["geant_ncv"] * c["coh"]
         return w * self.minos_eff(ev, shift)
