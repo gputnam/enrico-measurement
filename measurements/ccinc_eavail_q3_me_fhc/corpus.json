@@ -1,0 +1,6 @@
+[
+  {"id": "ccinc_eavail_q3_me_fhc", "class": "LowRecoilEavailQ3", "kwargs": {},
+   "title": "numu CC inclusive low recoil d2sigma/dEavail dq3 (theta_mu<20 deg, 1.5<p_mu<20 GeV/c) [eavail GeV, q3 GeV]",
+   "result": "ccinc_eavail_q3_me_fhc/ccinc_eavail_q3_xsec.pkl",
+   "motivation": "Locates the ~24% inclusive deficit (and the 41-46% QE-like deficit) in energy transfer: within each q3 slice the Eavail spectrum separates the QE peak (ground state / Pauli blocking at low q3), the dip between QE and Delta (2p2h/MEC, nucleon energy partly invisible), the Delta peak (pion FSI/absorption shifts it down by ~m_pi) and the higher-W/DIS tail. The corpus constrains only muon kinematics (inclusive) and QE-like/CC1pi+ topologies, where these mechanisms are degenerate."}
+]
