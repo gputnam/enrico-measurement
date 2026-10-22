@@ -1,0 +1,82 @@
+[
+ {
+  "id": "cc0pinp_stki_me_fhc_dpt",
+  "class": "STKI",
+  "kwargs": {
+   "variable": "dpt"
+  },
+  "title": "numu CC0pi Np (pmu 1.5-20 GeV/c, thmu<20 deg, 0.45<pp<1.2 GeV/c, thp<70 deg) dsigma/d(dpT): transverse momentum imbalance [GeV/c]",
+  "result": "cc0pinp_stki_me_fhc/cc0pinp_stki_me_fhc_dpt_xsec.pkl",
+  "motivation": "Model v5 has a global relativistic Fermi gas (k_F=221 MeV/c) CCQE, RS17 2p2h with an np-dominated pair final state and an Oset-type nucleon cascade. The corpus constrains the QE sector only through muon kinematics, SumTp and Eavail, where LFG+RPA, a spectral function, RPA alone and a stiffer axial form factor are degenerate. STKI of the leading proton in CC0pi Np separates the initial-state nucleon momentum (dpT/pn peak, Fermi edge) from intranuclear momentum transfer by 2p2h and proton FSI (dpT tail, dalphaT slope); no proton-angle or muon-proton correlation observable exists in the corpus."
+ },
+ {
+  "id": "cc0pinp_stki_me_fhc_dalphat",
+  "class": "STKI",
+  "kwargs": {
+   "variable": "dalphat"
+  },
+  "title": "numu CC0pi Np (pmu 1.5-20 GeV/c, thmu<20 deg, 0.45<pp<1.2 GeV/c, thp<70 deg) dsigma/d(dalphaT): boosting angle of the transverse imbalance [deg]",
+  "result": "cc0pinp_stki_me_fhc/cc0pinp_stki_me_fhc_dalphat_xsec.pkl",
+  "motivation": "Model v5 has a global relativistic Fermi gas (k_F=221 MeV/c) CCQE, RS17 2p2h with an np-dominated pair final state and an Oset-type nucleon cascade. The corpus constrains the QE sector only through muon kinematics, SumTp and Eavail, where LFG+RPA, a spectral function, RPA alone and a stiffer axial form factor are degenerate. STKI of the leading proton in CC0pi Np separates the initial-state nucleon momentum (dpT/pn peak, Fermi edge) from intranuclear momentum transfer by 2p2h and proton FSI (dpT tail, dalphaT slope); no proton-angle or muon-proton correlation observable exists in the corpus."
+ },
+ {
+  "id": "cc0pinp_stki_me_fhc_pn",
+  "class": "STKI",
+  "kwargs": {
+   "variable": "pn"
+  },
+  "title": "numu CC0pi Np (pmu 1.5-20 GeV/c, thmu<20 deg, 0.45<pp<1.2 GeV/c, thp<70 deg) dsigma/dpn: reconstructed initial-neutron momentum (b=27.13 MeV) [GeV/c]",
+  "result": "cc0pinp_stki_me_fhc/cc0pinp_stki_me_fhc_pn_xsec.pkl",
+  "motivation": "Model v5 has a global relativistic Fermi gas (k_F=221 MeV/c) CCQE, RS17 2p2h with an np-dominated pair final state and an Oset-type nucleon cascade. The corpus constrains the QE sector only through muon kinematics, SumTp and Eavail, where LFG+RPA, a spectral function, RPA alone and a stiffer axial form factor are degenerate. STKI of the leading proton in CC0pi Np separates the initial-state nucleon momentum (dpT/pn peak, Fermi edge) from intranuclear momentum transfer by 2p2h and proton FSI (dpT tail, dalphaT slope); no proton-angle or muon-proton correlation observable exists in the corpus."
+ },
+ {
+  "id": "cc0pinp_stki_me_fhc_dphit",
+  "class": "STKI",
+  "kwargs": {
+   "variable": "dphit"
+  },
+  "title": "numu CC0pi Np (pmu 1.5-20 GeV/c, thmu<20 deg, 0.45<pp<1.2 GeV/c, thp<70 deg) dsigma/d(dphiT): transverse opening-angle deviation [deg]",
+  "result": "cc0pinp_stki_me_fhc/cc0pinp_stki_me_fhc_dphit_xsec.pkl",
+  "motivation": "Model v5 has a global relativistic Fermi gas (k_F=221 MeV/c) CCQE, RS17 2p2h with an np-dominated pair final state and an Oset-type nucleon cascade. The corpus constrains the QE sector only through muon kinematics, SumTp and Eavail, where LFG+RPA, a spectral function, RPA alone and a stiffer axial form factor are degenerate. STKI of the leading proton in CC0pi Np separates the initial-state nucleon momentum (dpT/pn peak, Fermi edge) from intranuclear momentum transfer by 2p2h and proton FSI (dpT tail, dalphaT slope); no proton-angle or muon-proton correlation observable exists in the corpus."
+ },
+ {
+  "id": "cc0pinp_stki_me_fhc_pp",
+  "class": "STKI",
+  "kwargs": {
+   "variable": "pp"
+  },
+  "title": "numu CC0pi Np (pmu 1.5-20 GeV/c, thmu<20 deg, 0.45<pp<1.2 GeV/c, thp<70 deg) dsigma/dp_p: leading-proton momentum [GeV/c]",
+  "result": "cc0pinp_stki_me_fhc/cc0pinp_stki_me_fhc_pp_xsec.pkl",
+  "motivation": "Model v5 has a global relativistic Fermi gas (k_F=221 MeV/c) CCQE, RS17 2p2h with an np-dominated pair final state and an Oset-type nucleon cascade. The corpus constrains the QE sector only through muon kinematics, SumTp and Eavail, where LFG+RPA, a spectral function, RPA alone and a stiffer axial form factor are degenerate. STKI of the leading proton in CC0pi Np separates the initial-state nucleon momentum (dpT/pn peak, Fermi edge) from intranuclear momentum transfer by 2p2h and proton FSI (dpT tail, dalphaT slope); no proton-angle or muon-proton correlation observable exists in the corpus."
+ },
+ {
+  "id": "cc0pinp_stki_me_fhc_thetap",
+  "class": "STKI",
+  "kwargs": {
+   "variable": "thetap"
+  },
+  "title": "numu CC0pi Np (pmu 1.5-20 GeV/c, thmu<20 deg, 0.45<pp<1.2 GeV/c, thp<70 deg) dsigma/dtheta_p: leading-proton polar angle [deg]",
+  "result": "cc0pinp_stki_me_fhc/cc0pinp_stki_me_fhc_thetap_xsec.pkl",
+  "motivation": "Model v5 has a global relativistic Fermi gas (k_F=221 MeV/c) CCQE, RS17 2p2h with an np-dominated pair final state and an Oset-type nucleon cascade. The corpus constrains the QE sector only through muon kinematics, SumTp and Eavail, where LFG+RPA, a spectral function, RPA alone and a stiffer axial form factor are degenerate. STKI of the leading proton in CC0pi Np separates the initial-state nucleon momentum (dpT/pn peak, Fermi edge) from intranuclear momentum transfer by 2p2h and proton FSI (dpT tail, dalphaT slope); no proton-angle or muon-proton correlation observable exists in the corpus."
+ },
+ {
+  "id": "cc0pinp_stki_me_fhc_nprot",
+  "class": "STKI",
+  "kwargs": {
+   "variable": "nprot"
+  },
+  "title": "numu CC0pi Np (pmu 1.5-20 GeV/c, thmu<20 deg, 0.45<pp<1.2 GeV/c, thp<70 deg) dsigma/dN_p: number of protons in the proton phase space, 1 or >=2 (bin 2 = >=2) [count]",
+  "result": "cc0pinp_stki_me_fhc/cc0pinp_stki_me_fhc_nprot_xsec.pkl",
+  "motivation": "Model v5 has a global relativistic Fermi gas (k_F=221 MeV/c) CCQE, RS17 2p2h with an np-dominated pair final state and an Oset-type nucleon cascade. The corpus constrains the QE sector only through muon kinematics, SumTp and Eavail, where LFG+RPA, a spectral function, RPA alone and a stiffer axial form factor are degenerate. STKI of the leading proton in CC0pi Np separates the initial-state nucleon momentum (dpT/pn peak, Fermi edge) from intranuclear momentum transfer by 2p2h and proton FSI (dpT tail, dalphaT slope); no proton-angle or muon-proton correlation observable exists in the corpus."
+ },
+ {
+  "id": "cc0pinp_stki_me_fhc_dpt_dalphat",
+  "class": "STKI",
+  "kwargs": {
+   "variable": "dpt_dalphat"
+  },
+  "title": "numu CC0pi Np (pmu 1.5-20 GeV/c, thmu<20 deg, 0.45<pp<1.2 GeV/c, thp<70 deg) d2sigma/d(dpT)d(dalphaT): dpT [GeV/c] in bins of dalphaT [deg]",
+  "result": "cc0pinp_stki_me_fhc/cc0pinp_stki_me_fhc_dpt_dalphat_xsec.pkl",
+  "motivation": "Model v5 has a global relativistic Fermi gas (k_F=221 MeV/c) CCQE, RS17 2p2h with an np-dominated pair final state and an Oset-type nucleon cascade. The corpus constrains the QE sector only through muon kinematics, SumTp and Eavail, where LFG+RPA, a spectral function, RPA alone and a stiffer axial form factor are degenerate. STKI of the leading proton in CC0pi Np separates the initial-state nucleon momentum (dpT/pn peak, Fermi edge) from intranuclear momentum transfer by 2p2h and proton FSI (dpT tail, dalphaT slope); no proton-angle or muon-proton correlation observable exists in the corpus."
+ }
+]
