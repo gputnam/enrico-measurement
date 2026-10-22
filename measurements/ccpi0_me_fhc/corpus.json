@@ -1,0 +1,62 @@
+[
+ {
+  "id": "ccpi0_me_fhc_wexp",
+  "class": "CCPi0",
+  "kwargs": {
+   "variable": "wexp"
+  },
+  "title": "numu CC1pi0 (1 pi0, no pi+-, W_exp<1.8 GeV, theta_mu<20 deg, 1.5<p_mu<20 GeV/c) dsigma/dW_exp [wexp GeV]",
+  "result": "ccpi0_me_fhc/ccpi0_me_fhc_wexp_xsec.pkl",
+  "motivation": "First neutral-pion measurement in the corpus. CC single-pi0 (W_exp<1.8 GeV, no charged pions) is a mixed-isospin channel: Delta(1232) (I=3/2) gives p pi+ : p pi0 : n pi+ = 9:2:1, while N(1440)/N(1520)/N(1535) and non-resonant I=1/2 strength enhance pi0 relative to pi+. It has no coherent contribution and is fed by pi+ -> pi0 charge exchange. Compared with the CC1pi+ samples (norm 0.68-0.80, W_exp<1.4) in the same muon phase space, its normalisation and its W_exp distribution across 1.0-1.8 GeV separate a too-weak Delta (C5A/MA_Delta) from missing higher-resonance/non-resonant strength and from coherent production."
+ },
+ {
+  "id": "ccpi0_me_fhc_q2",
+  "class": "CCPi0",
+  "kwargs": {
+   "variable": "q2"
+  },
+  "title": "numu CC1pi0 (1 pi0, no pi+-, W_exp<1.8 GeV, theta_mu<20 deg, 1.5<p_mu<20 GeV/c) dsigma/dQ2 [q2 GeV^2]",
+  "result": "ccpi0_me_fhc/ccpi0_me_fhc_q2_xsec.pkl",
+  "motivation": "First neutral-pion measurement in the corpus. CC single-pi0 (W_exp<1.8 GeV, no charged pions) is a mixed-isospin channel: Delta(1232) (I=3/2) gives p pi+ : p pi0 : n pi+ = 9:2:1, while N(1440)/N(1520)/N(1535) and non-resonant I=1/2 strength enhance pi0 relative to pi+. It has no coherent contribution and is fed by pi+ -> pi0 charge exchange. Compared with the CC1pi+ samples (norm 0.68-0.80, W_exp<1.4) in the same muon phase space, its normalisation and its W_exp distribution across 1.0-1.8 GeV separate a too-weak Delta (C5A/MA_Delta) from missing higher-resonance/non-resonant strength and from coherent production."
+ },
+ {
+  "id": "ccpi0_me_fhc_tpi0",
+  "class": "CCPi0",
+  "kwargs": {
+   "variable": "tpi0"
+  },
+  "title": "numu CC1pi0 (1 pi0, no pi+-, W_exp<1.8 GeV, theta_mu<20 deg, 1.5<p_mu<20 GeV/c) dsigma/dT_pi0 [tpi0 GeV]",
+  "result": "ccpi0_me_fhc/ccpi0_me_fhc_tpi0_xsec.pkl",
+  "motivation": "First neutral-pion measurement in the corpus. CC single-pi0 (W_exp<1.8 GeV, no charged pions) is a mixed-isospin channel: Delta(1232) (I=3/2) gives p pi+ : p pi0 : n pi+ = 9:2:1, while N(1440)/N(1520)/N(1535) and non-resonant I=1/2 strength enhance pi0 relative to pi+. It has no coherent contribution and is fed by pi+ -> pi0 charge exchange. Compared with the CC1pi+ samples (norm 0.68-0.80, W_exp<1.4) in the same muon phase space, its normalisation and its W_exp distribution across 1.0-1.8 GeV separate a too-weak Delta (C5A/MA_Delta) from missing higher-resonance/non-resonant strength and from coherent production."
+ },
+ {
+  "id": "ccpi0_me_fhc_thetapi0",
+  "class": "CCPi0",
+  "kwargs": {
+   "variable": "thetapi0"
+  },
+  "title": "numu CC1pi0 (1 pi0, no pi+-, W_exp<1.8 GeV, theta_mu<20 deg, 1.5<p_mu<20 GeV/c) dsigma/dtheta_pi0 [thetapi0 deg]",
+  "result": "ccpi0_me_fhc/ccpi0_me_fhc_thetapi0_xsec.pkl",
+  "motivation": "First neutral-pion measurement in the corpus. CC single-pi0 (W_exp<1.8 GeV, no charged pions) is a mixed-isospin channel: Delta(1232) (I=3/2) gives p pi+ : p pi0 : n pi+ = 9:2:1, while N(1440)/N(1520)/N(1535) and non-resonant I=1/2 strength enhance pi0 relative to pi+. It has no coherent contribution and is fed by pi+ -> pi0 charge exchange. Compared with the CC1pi+ samples (norm 0.68-0.80, W_exp<1.4) in the same muon phase space, its normalisation and its W_exp distribution across 1.0-1.8 GeV separate a too-weak Delta (C5A/MA_Delta) from missing higher-resonance/non-resonant strength and from coherent production."
+ },
+ {
+  "id": "ccpi0_me_fhc_pmu",
+  "class": "CCPi0",
+  "kwargs": {
+   "variable": "pmu"
+  },
+  "title": "numu CC1pi0 (1 pi0, no pi+-, W_exp<1.8 GeV, theta_mu<20 deg, 1.5<p_mu<20 GeV/c) dsigma/dp_mu [pmu GeV/c]",
+  "result": "ccpi0_me_fhc/ccpi0_me_fhc_pmu_xsec.pkl",
+  "motivation": "First neutral-pion measurement in the corpus. CC single-pi0 (W_exp<1.8 GeV, no charged pions) is a mixed-isospin channel: Delta(1232) (I=3/2) gives p pi+ : p pi0 : n pi+ = 9:2:1, while N(1440)/N(1520)/N(1535) and non-resonant I=1/2 strength enhance pi0 relative to pi+. It has no coherent contribution and is fed by pi+ -> pi0 charge exchange. Compared with the CC1pi+ samples (norm 0.68-0.80, W_exp<1.4) in the same muon phase space, its normalisation and its W_exp distribution across 1.0-1.8 GeV separate a too-weak Delta (C5A/MA_Delta) from missing higher-resonance/non-resonant strength and from coherent production."
+ },
+ {
+  "id": "ccpi0_me_fhc_thetamu",
+  "class": "CCPi0",
+  "kwargs": {
+   "variable": "thetamu"
+  },
+  "title": "numu CC1pi0 (1 pi0, no pi+-, W_exp<1.8 GeV, theta_mu<20 deg, 1.5<p_mu<20 GeV/c) dsigma/dtheta_mu [thetamu deg]",
+  "result": "ccpi0_me_fhc/ccpi0_me_fhc_thetamu_xsec.pkl",
+  "motivation": "First neutral-pion measurement in the corpus. CC single-pi0 (W_exp<1.8 GeV, no charged pions) is a mixed-isospin channel: Delta(1232) (I=3/2) gives p pi+ : p pi0 : n pi+ = 9:2:1, while N(1440)/N(1520)/N(1535) and non-resonant I=1/2 strength enhance pi0 relative to pi+. It has no coherent contribution and is fed by pi+ -> pi0 charge exchange. Compared with the CC1pi+ samples (norm 0.68-0.80, W_exp<1.4) in the same muon phase space, its normalisation and its W_exp distribution across 1.0-1.8 GeV separate a too-weak Delta (C5A/MA_Delta) from missing higher-resonance/non-resonant strength and from coherent production."
+ }
+]
