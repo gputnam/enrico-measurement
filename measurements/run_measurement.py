@@ -35,8 +35,8 @@ from xsec.runner import run  # noqa: E402
 from xsec.tunes import Tune  # noqa: E402
 from xsec.util import load_measurement_module  # noqa: E402
 
-DF_MC = "/pnfs/sbnd/scratch/users/gputnam/MvA-Loop/df/v1/me_fhc_mc"
-DF_DATA = "/pnfs/sbnd/scratch/users/gputnam/MvA-Loop/df/v1/me_fhc_data"
+DF_MC = "/pnfs/sbnd/scratch/users/gputnam/MvA-Loop/df/v2/me_fhc_mc"
+DF_DATA = "/pnfs/sbnd/scratch/users/gputnam/MvA-Loop/df/v2/me_fhc_data"
 
 
 def limit_files(paths, n):

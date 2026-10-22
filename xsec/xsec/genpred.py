@@ -16,7 +16,10 @@ Columns provided (anything else a measurement's truth/signal needs must be added
     mc_incoming, mc_current, mc_intType, mc_targetZ, mc_targetA, mc_targetNucleon, mc_Enu, mc_Q2, mc_W,
     mc_x, mc_y, mc_nu_0..3, mc_vtx_0..3 (a fixed point inside every tracker FV), mc_lep_0..3,
     mc_resID (-1), mc_charm (0), t_is_fiducial (1), t_N_pip/pim/pi0,
-    tfs_* (TruthSummary of makedf/src/Derived.cxx), t_theta_mu, t_p_mu, t_pt_mu, t_pz_mu, t_q0, t_q3.
+    tfs_* (TruthSummary of makedf/src/Derived.cxx, incl. tfs_pi0_* and tfs_gamma_*_0),
+    t_theta_mu, t_p_mu, t_pt_mu, t_pz_mu, t_q0, t_q3.
+Not available (MINERvA-simulation only, must not be used in signal()/truth()): t_pi0_* (tuple order),
+t_N_gamma_pi0, t_gamma_* (pi0 decay photons); use tfs_pi0_* instead.
 Weight columns (w_fsi_*, geant_*, cv_wgt_tuple) are 1.  GENIE knob columns (g_*) are absent: a
 signal definition or truth variable must not use them.
 """
@@ -27,7 +30,8 @@ import uproot
 from .kinematics import BEAM_ANGLE, Event
 
 M_P_DF, M_N_DF, M_PI_DF = 938.272, 939.565, 139.570  # MeV (makedf Derived.cxx kMp, kMn, kMpi)
-K_SLOTS = 2  # leading protons / pions stored per event (makedf TruthSummary::K)
+M_PI0_DF = 134.977  # MeV (makedf Derived.cxx kMpi0)
+K_SLOTS = 2  # leading protons / pions / pi0s stored per event (makedf TruthSummary::K)
 VERTEX = (0.0, 0.0, 7000.0)  # mm: inside the tracker FV of every measurement
 
 # NuHepMC signal process id -> GENIE mc_intType (1 QE, 2 RES, 3 DIS, 4 COH, 5 AMNUGAMMA, 7 NUEEL, 8 MEC/2p2h)
@@ -161,6 +165,22 @@ def load_events(path, max_events=None):
             d[f"tfs_{name}_px_{k}"], d[f"tfs_{name}_py_{k}"], d[f"tfs_{name}_pz_{k}"] = bx, by, bz
             if name == "pi":
                 d[f"tfs_pi_pdg_{k}"] = np.where(valid, ak.to_numpy(ak.fill_none(ak.firsts(hp[sel]), 0)), 0)
+    # leading-K pi0s by kinetic energy (makedf TruthSummary tfs_pi0_*), detector frame
+    Tpi0 = hE - M_PI0_DF
+    order = ak.argsort(ak.where(is_pi0, Tpi0, -np.inf), axis=1, ascending=False)
+    for k in range(K_SLOTS):
+        sel = order[:, k:k + 1]
+        valid = ak.to_numpy(ak.fill_none(ak.firsts(is_pi0[sel]), False))
+        g = lambda v: np.where(valid, ak.to_numpy(ak.fill_none(ak.firsts(v[sel]), np.nan)), np.nan)
+        bx, by, bz = _from_beam(g(hx), g(hy), g(hz))
+        d[f"tfs_pi0_T_{k}"] = g(Tpi0)
+        d[f"tfs_pi0_px_{k}"], d[f"tfs_pi0_py_{k}"], d[f"tfs_pi0_pz_{k}"] = bx, by, bz
+    # leading final-state photon by energy (makedf TruthSummary tfs_gamma_*_0; pi0s are undecayed)
+    gi = ak.argmax(ak.where(is_g, hE, -np.inf), axis=1, keepdims=True)
+    gvalid = ak.to_numpy(ak.any(is_g, axis=1))
+    gg = lambda v: np.where(gvalid, ak.to_numpy(ak.fill_none(ak.firsts(v[gi]), np.nan)), np.nan)
+    d["tfs_gamma_E_0"] = gg(hE)
+    d["tfs_gamma_px_0"], d["tfs_gamma_py_0"], d["tfs_gamma_pz_0"] = _from_beam(gg(hx), gg(hy), gg(hz))
     # true muon summary in the beam frame
     p = np.sqrt(lep["px"] ** 2 + lep["py"] ** 2 + lep["pz"] ** 2)
     d["t_p_mu"] = p
