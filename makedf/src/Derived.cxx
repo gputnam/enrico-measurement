@@ -46,7 +46,11 @@ void TruthSummary::book(TTree* t) {
     I("tfs_pi_pdg_" + s, &pi_pdg[k]); F("tfs_pi_T_" + s, &pi_T[k]);
     F("tfs_pi_px_" + s, &pi_px[k]); F("tfs_pi_py_" + s, &pi_py[k]);
     F("tfs_pi_pz_" + s, &pi_pz[k]);
+    F("tfs_pi0_T_" + s, &pi0_T[k]); F("tfs_pi0_px_" + s, &pi0_px[k]);
+    F("tfs_pi0_py_" + s, &pi0_py[k]); F("tfs_pi0_pz_" + s, &pi0_pz[k]);
   }
+  F("tfs_gamma_E_0", &gamma_E); F("tfs_gamma_px_0", &gamma_px);
+  F("tfs_gamma_py_0", &gamma_py); F("tfs_gamma_pz_0", &gamma_pz);
   // true muon kinematics in the beam frame and energy/momentum transfer [MeV]
   F("t_theta_mu", &theta_mu); F("t_p_mu", &p_mu); F("t_pt_mu", &pt_mu); F("t_pz_mu", &pz_mu);
   F("t_q0", &q0); F("t_q3", &q3);
@@ -58,7 +62,8 @@ void TruthSummary::compute() {
   lead_nucleon_pdg = 0;
   lead_nucleon_E = 0;
   struct P { double T, px, py, pz; int pdg; };
-  std::vector<P> protons, pions;
+  std::vector<P> protons, pions, pi0s;
+  gamma_E = gamma_px = gamma_py = gamma_pz = NAN;
   const size_t n = std::min<size_t>((size_t)std::lround(fN->get(0)), fPDG->size());
   for (size_t i = 0; i < n; ++i) {
     const int pdg = (int)std::lround(fPDG->get(i));
@@ -79,12 +84,14 @@ void TruthSummary::compute() {
       pions.push_back({E - kMpi, px, py, pz, pdg});
     } else if (pdg == 111) {
       ++n_pi0; eavail += E;
+      pi0s.push_back({E - kMpi0, px, py, pz, pdg});
     } else if (apdg == 321) {
       ++n_kpm; eavail += E;
     } else if (apdg == 311 || apdg == 130 || apdg == 310) {
       ++n_k0; eavail += E;
     } else if (pdg == 22) {
       ++n_gamma; max_gammaE = std::max<float>(max_gammaE, E); eavail += E;
+      if (!(E <= gamma_E)) { gamma_E = E; gamma_px = px; gamma_py = py; gamma_pz = pz; }
     } else if (apdg >= 11 && apdg <= 16) {
       ++n_lep;
     } else if (apdg > 1000000000) {
@@ -103,6 +110,7 @@ void TruthSummary::compute() {
   auto byT = [](const P& a, const P& b) { return a.T > b.T; };
   std::sort(protons.begin(), protons.end(), byT);
   std::sort(pions.begin(), pions.end(), byT);
+  std::sort(pi0s.begin(), pi0s.end(), byT);
   for (int k = 0; k < K; ++k) {
     if ((size_t)k < protons.size()) {
       p_T[k] = protons[k].T; p_px[k] = protons[k].px; p_py[k] = protons[k].py; p_pz[k] = protons[k].pz;
@@ -114,6 +122,11 @@ void TruthSummary::compute() {
       pi_px[k] = pions[k].px; pi_py[k] = pions[k].py; pi_pz[k] = pions[k].pz;
     } else {
       pi_pdg[k] = 0; pi_T[k] = pi_px[k] = pi_py[k] = pi_pz[k] = NAN;
+    }
+    if ((size_t)k < pi0s.size()) {
+      pi0_T[k] = pi0s[k].T; pi0_px[k] = pi0s[k].px; pi0_py[k] = pi0s[k].py; pi0_pz[k] = pi0s[k].pz;
+    } else {
+      pi0_T[k] = pi0_px[k] = pi0_py[k] = pi0_pz[k] = NAN;
     }
   }
   // muon in the beam frame: rotate about x by kBeamAngle

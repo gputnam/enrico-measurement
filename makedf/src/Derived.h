@@ -12,7 +12,7 @@ class TTree;
 namespace makedf {
 
 constexpr double kBeamAngle = -0.05887;  // NuMI beam pitch [rad], rotation about x (MAT convention)
-constexpr double kMp = 938.272, kMn = 939.565, kMpi = 139.570, kMmu = 105.658;
+constexpr double kMp = 938.272, kMn = 939.565, kMpi = 139.570, kMmu = 105.658, kMpi0 = 134.977;
 
 struct PreselConfig {
   // Reco: loose superset of the tracker-fiducial analyses
@@ -44,6 +44,8 @@ class TruthSummary {
   float p_T[K], p_px[K], p_py[K], p_pz[K];
   float pi_T[K], pi_px[K], pi_py[K], pi_pz[K];
   int pi_pdg[K];
+  float pi0_T[K], pi0_px[K], pi0_py[K], pi0_pz[K];  // leading pi0s by kinetic energy (v2)
+  float gamma_E, gamma_px, gamma_py, gamma_pz;     // leading final-state photon (not pi0 decay) (v2)
   float theta_mu, p_mu, pt_mu, pz_mu, q0, q3;
 };
 

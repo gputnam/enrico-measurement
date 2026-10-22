@@ -196,3 +196,90 @@ pi_s1_bb_dn      MasterAnaDev_piFit_score1_BetheBloch_biasDown
 pi_s1_mass_up    MasterAnaDev_piFit_score1_Mass_biasUp
 pi_s1_mass_dn    MasterAnaDev_piFit_score1_Mass_biasDown
 pi_s1_birks      MasterAnaDev_piFit_score1_Birks
+
+# ===== v2 additions: pi0 / photon / EM-shower reconstruction =====
+# CCProtonPi0-style pi0 reconstruction stored in MasterAnaDev (AngleScan shower finding, two
+# photon candidates gamma1/gamma2; g1 is the more energetic one in ~90% of events).
+# No pi0 candidate -> -9999 (pi0_mgg can also be 0).  pi0 = g1 + g2 (pi0_E_Cal == pi0_E, not stored).
+# Energies/momenta MeV, distances/positions mm, times ns, theta/phi rad in the detector frame
+# (theta w.r.t. detector z, NOT the beam), pi0_thetaX/Y and pi0_oa in DEGREES.
+pi0_prefilter    Cut_PreFilter_Pi0
+pi0_ml_evt       is_Pi0_ML_Event
+n_showers        anglescan_nfoundBlobs
+n_good_blobs     Good_Blobs
+shower_E         shower_energy[:4]
+shower_nclus     shower_nclusters[:4]
+shower_ndig      shower_ndigits[:4]
+shower_good      shower_isGood[:4]
+shower_score     shower_score[:4]
+vtx_min_oa       prim_vtx_smallest_opening_angle
+
+# --- reconstructed pi0 (from gamma1 + gamma2)
+pi0_mgg          pi0_invMass
+pi0_E            pi0_E
+pi0_T            pi0_KE
+pi0_P            pi0_P
+pi0_px           pi0_px
+pi0_py           pi0_py
+pi0_pz           pi0_pz
+pi0_theta        pi0_theta
+pi0_phi          pi0_phi
+pi0_thetaX       pi0_thetaX
+pi0_thetaY       pi0_thetaY
+pi0_oa           pi0_openingAngle
+pi0_cos_oa       pi0_cos_openingAngle
+
+# --- photon candidates (g1 = gamma1, g2 = gamma2); g?_vtx = conversion point, g?_dir = unit direction
+g1_E             gamma1_E
+g1_px            gamma1_px
+g1_py            gamma1_py
+g1_pz            gamma1_pz
+g1_theta         gamma1_theta
+g1_phi           gamma1_phi
+g1_dir           gamma1_direction[:3]
+g1_vtx           gamma1_vertex[:3]
+g1_dist_vtx      gamma1_dist_vtx
+g1_dEdx          gamma1_dEdx
+g1_time          gamma1_time
+g1_maxZ          gamma1_maxZ
+g1_evis_trk      gamma1_evis_trkr
+g1_evis_ecal     gamma1_evis_ecal
+g1_evis_scalX    gamma1_evis_scal_X
+g1_evis_scalUV   gamma1_evis_scal_UV
+g1_E_trk         gamma1_energy_trkr
+g1_E_ecal        gamma1_energy_ecal
+g1_E_scalX       gamma1_energy_scal_X
+g1_E_scalUV      gamma1_energy_scal_UV
+g2_E             gamma2_E
+g2_px            gamma2_px
+g2_py            gamma2_py
+g2_pz            gamma2_pz
+g2_theta         gamma2_theta
+g2_phi           gamma2_phi
+g2_dir           gamma2_direction[:3]
+g2_vtx           gamma2_vertex[:3]
+g2_dist_vtx      gamma2_dist_vtx
+g2_dEdx          gamma2_dEdx
+g2_time          gamma2_time
+g2_maxZ          gamma2_maxZ
+g2_evis_trk      gamma2_evis_trkr
+g2_evis_ecal     gamma2_evis_ecal
+g2_evis_scalX    gamma2_evis_scal_X
+g2_evis_scalUV   gamma2_evis_scal_UV
+g2_E_trk         gamma2_energy_trkr
+g2_E_ecal        gamma2_energy_ecal
+g2_E_scalX       gamma2_energy_scal_X
+g2_E_scalUV      gamma2_energy_scal_UV
+
+# --- other energy / isolated-activity quantities useful for EM-shower selections
+had_em_frac      hadron_em_fraction
+p_em_frac        proton_em_fraction
+e_unattached     phys_energy_unattached
+e_dispersed      phys_energy_dispersed
+n_muon_iso_blobs n_muon_iso_blobs
+muon_iso_blobs_E muon_iso_blobs_energy
+vtx_iso_blobs_E_out vtx_iso_blobs_energy_outside_radius
+
+# --- reconstructed prongs (the NuE prong EM-ID variables prong_* are unfilled (-999) in the
+#     preselected sample and are not stored; see SOURCE_BRANCHES.md)
+n_prongs         n_prongs

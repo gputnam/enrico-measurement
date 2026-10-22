@@ -92,3 +92,21 @@ g_Theta_Delta2Npi_m1     truth_genie_wgt_Theta_Delta2Npi[2]
 g_Theta_Delta2Npi_p1     truth_genie_wgt_Theta_Delta2Npi[4]
 g_VecFFCCQEshape_m1      truth_genie_wgt_VecFFCCQEshape[2]
 g_VecFFCCQEshape_p1      truth_genie_wgt_VecFFCCQEshape[4]
+
+# ===== v2 additions: true pi0s (Truth tree and MasterAnaDev) =====
+# t_pi0_*: final-state pi0s in the tuple's (unsorted) order: E, detector-frame momentum (MeV),
+#          theta w.r.t. the beam (rad); empty slots -1 (theta -9).  For single-pi0 events identical to
+#          tfs_pi0_* (+ m_pi0).  MINERvA-simulation reference only: signal()/truth() must use tfs_pi0_*.
+# t_gamma_*: the pi0 decay photons, filled only for exactly one pi0 (t_N_gamma_pi0 == 2, or 1 for a
+#            Dalitz decay); MINERvA simulation only, NOT available for generator predictions.
+t_N_gamma_pi0    truth_N_gamma_pi0
+t_pi0_E          truth_pi0_E[:2]
+t_pi0_px         truth_pi0_px[:2]
+t_pi0_py         truth_pi0_py[:2]
+t_pi0_pz         truth_pi0_pz[:2]
+t_pi0_theta      truth_pi0_theta_wrtbeam[:2]
+t_gamma_E        truth_gamma_E[:2]
+t_gamma_px       truth_gamma_px[:2]
+t_gamma_py       truth_gamma_py[:2]
+t_gamma_pz       truth_gamma_pz[:2]
+t_gamma_theta    truth_gamma_theta_wrtbeam[:2]

@@ -37,9 +37,12 @@ over xrootd, enabling only the needed branches, and writes:
 * `meta`  : per input file POT and bookkeeping
 Columns are listed in plain-text files (`name  branch | branch[i] | branch[:K]`), so the content
 can change without recompiling.  Quantities that need variable-length inputs are computed in C++:
-final-state truth summary (multiplicities, sum of proton KE, leading p/pi), GENIE elastic-FSI
+final-state truth summary (multiplicities, sum of proton KE, leading p/pi/pi0/photon), GENIE elastic-FSI
 fix weights, Geant hadron reweights, and the low-recoil-pion (Michel) reconstruction summary.
-Full ME FHC (11 TB of MC, 1 TB of data) -> 36 GB of DF files (v1).
+Full ME FHC (11 TB of MC, 1 TB of data) -> 36 GB of DF files (v1); ~42 GB for v2 (= v1 plus the
+pi0/photon/shower reconstruction and truth pi0 columns, ~+18% per file).  Source branches that are
+not in the DFs are listed in `makedf/config/SOURCE_BRANCHES.md`
+(regenerate with `makedf/scripts/source_branches.py`).
 
 ## Stage 2: xsec (python)
 * `flux`: FluxReweighter-equivalent weights, nu-e constraint, universes, integrals

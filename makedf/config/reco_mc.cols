@@ -48,3 +48,25 @@ rerr_dispr_other         part_response_recoil_dispr_id_and_blobbed_energy_other_
 rerr_dispr_low_neutron   part_response_recoil_dispr_id_and_blobbed_energy_low_neutron_id_err
 rerr_dispr_mid_neutron   part_response_recoil_dispr_id_and_blobbed_energy_mid_neutron_id_err
 rerr_dispr_high_neutron  part_response_recoil_dispr_id_and_blobbed_energy_high_neutron_id_err
+
+# ===== v2 additions: truth matching of the reconstructed photon candidates / showers =====
+# Geant4 particle that deposited most of each photon candidate's energy (-1 if no candidate).
+t_g1_pdg         truth_gamma1_PDG
+t_g1_parent_pdg  truth_gamma1_Parent_PDG
+t_g1_parent_E    truth_gamma1_Parent_E
+t_g1_E           truth_gamma1_E
+t_g1_px          truth_gamma1_px
+t_g1_py          truth_gamma1_py
+t_g1_pz          truth_gamma1_pz
+t_g1_frac        truth_gamma1_fraction
+t_g1_evis        truth_gamma1_evis_total
+t_g2_pdg         truth_gamma2_PDG
+t_g2_parent_pdg  truth_gamma2_Parent_PDG
+t_g2_parent_E    truth_gamma2_Parent_E
+t_g2_E           truth_gamma2_E
+t_g2_px          truth_gamma2_px
+t_g2_py          truth_gamma2_py
+t_g2_pz          truth_gamma2_pz
+t_g2_frac        truth_gamma2_fraction
+t_g2_evis        truth_gamma2_evis_total
+t_shower_pdg     shower_pdg[:4]
