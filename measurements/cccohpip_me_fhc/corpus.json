@@ -1,0 +1,72 @@
+[
+ {
+  "id": "cccohpip_me_fhc_epi",
+  "class": "CCCohPip",
+  "kwargs": {
+   "variable": "epi"
+  },
+  "title": "numu CC coherent-like pi+ on CH (mu- + 1 pi+, no nucleons, |t|<0.125 GeV^2, 2<E_nu<20 GeV) dsigma/depi: pion energy E_pi [GeV]",
+  "result": "cccohpip_me_fhc/cccohpip_me_fhc_epi_xsec.pkl",
+  "motivation": "Direct test of the v7 coherent pi+ model (Berger-Sehgal PCAC + Rein-Sehgal hadronic input above T_pi=1.7 GeV): mu- + one pi+ and no nucleons at low |t| on CH. The E_pi, theta_pi and E_nu dependence separate an underpredicted high-energy coherent cross section (hypothesis A) from a deficient incoherent low-Q2 DIS (hypothesis B) behind the low-pT/high-pz deficit of ccinc_2d and the forward-pion deficit of ccpip_thetapi; no corpus entry isolates coherent production."
+ },
+ {
+  "id": "cccohpip_me_fhc_thetapi",
+  "class": "CCCohPip",
+  "kwargs": {
+   "variable": "thetapi"
+  },
+  "title": "numu CC coherent-like pi+ on CH (mu- + 1 pi+, no nucleons, |t|<0.125 GeV^2, 2<E_nu<20 GeV) dsigma/dthetapi: pion angle theta_pi w.r.t. the beam [deg]",
+  "result": "cccohpip_me_fhc/cccohpip_me_fhc_thetapi_xsec.pkl",
+  "motivation": "Direct test of the v7 coherent pi+ model (Berger-Sehgal PCAC + Rein-Sehgal hadronic input above T_pi=1.7 GeV): mu- + one pi+ and no nucleons at low |t| on CH. The E_pi, theta_pi and E_nu dependence separate an underpredicted high-energy coherent cross section (hypothesis A) from a deficient incoherent low-Q2 DIS (hypothesis B) behind the low-pT/high-pz deficit of ccinc_2d and the forward-pion deficit of ccpip_thetapi; no corpus entry isolates coherent production."
+ },
+ {
+  "id": "cccohpip_me_fhc_enu",
+  "class": "CCCohPip",
+  "kwargs": {
+   "variable": "enu"
+  },
+  "title": "numu CC coherent-like pi+ on CH (mu- + 1 pi+, no nucleons, |t|<0.125 GeV^2, 2<E_nu<20 GeV) dsigma/denu: neutrino energy E_nu = E_mu + E_pi [GeV] (flux-integrated dsigma/dE_nu, 0-100 GeV flux)",
+  "result": "cccohpip_me_fhc/cccohpip_me_fhc_enu_xsec.pkl",
+  "motivation": "Direct test of the v7 coherent pi+ model (Berger-Sehgal PCAC + Rein-Sehgal hadronic input above T_pi=1.7 GeV): mu- + one pi+ and no nucleons at low |t| on CH. The E_pi, theta_pi and E_nu dependence separate an underpredicted high-energy coherent cross section (hypothesis A) from a deficient incoherent low-Q2 DIS (hypothesis B) behind the low-pT/high-pz deficit of ccinc_2d and the forward-pion deficit of ccpip_thetapi; no corpus entry isolates coherent production."
+ },
+ {
+  "id": "cccohpip_me_fhc_t",
+  "class": "CCCohPip",
+  "kwargs": {
+   "variable": "t"
+  },
+  "title": "numu CC coherent-like pi+ on CH (mu- + 1 pi+, no nucleons, |t|<0.125 GeV^2, 2<E_nu<20 GeV) dsigma/dt: four-momentum transfer to the nucleus |t| [GeV^2]",
+  "result": "cccohpip_me_fhc/cccohpip_me_fhc_t_xsec.pkl",
+  "motivation": "Direct test of the v7 coherent pi+ model (Berger-Sehgal PCAC + Rein-Sehgal hadronic input above T_pi=1.7 GeV): mu- + one pi+ and no nucleons at low |t| on CH. The E_pi, theta_pi and E_nu dependence separate an underpredicted high-energy coherent cross section (hypothesis A) from a deficient incoherent low-Q2 DIS (hypothesis B) behind the low-pT/high-pz deficit of ccinc_2d and the forward-pion deficit of ccpip_thetapi; no corpus entry isolates coherent production."
+ },
+ {
+  "id": "cccohpip_me_fhc_q2",
+  "class": "CCCohPip",
+  "kwargs": {
+   "variable": "q2"
+  },
+  "title": "numu CC coherent-like pi+ on CH (mu- + 1 pi+, no nucleons, |t|<0.125 GeV^2, 2<E_nu<20 GeV) dsigma/dq2: Q^2 [GeV^2]",
+  "result": "cccohpip_me_fhc/cccohpip_me_fhc_q2_xsec.pkl",
+  "motivation": "Direct test of the v7 coherent pi+ model (Berger-Sehgal PCAC + Rein-Sehgal hadronic input above T_pi=1.7 GeV): mu- + one pi+ and no nucleons at low |t| on CH. The E_pi, theta_pi and E_nu dependence separate an underpredicted high-energy coherent cross section (hypothesis A) from a deficient incoherent low-Q2 DIS (hypothesis B) behind the low-pT/high-pz deficit of ccinc_2d and the forward-pion deficit of ccpip_thetapi; no corpus entry isolates coherent production."
+ },
+ {
+  "id": "cccohpip_me_fhc_pmu",
+  "class": "CCCohPip",
+  "kwargs": {
+   "variable": "pmu"
+  },
+  "title": "numu CC coherent-like pi+ on CH (mu- + 1 pi+, no nucleons, |t|<0.125 GeV^2, 2<E_nu<20 GeV) dsigma/dpmu: muon momentum p_mu [GeV/c]",
+  "result": "cccohpip_me_fhc/cccohpip_me_fhc_pmu_xsec.pkl",
+  "motivation": "Direct test of the v7 coherent pi+ model (Berger-Sehgal PCAC + Rein-Sehgal hadronic input above T_pi=1.7 GeV): mu- + one pi+ and no nucleons at low |t| on CH. The E_pi, theta_pi and E_nu dependence separate an underpredicted high-energy coherent cross section (hypothesis A) from a deficient incoherent low-Q2 DIS (hypothesis B) behind the low-pT/high-pz deficit of ccinc_2d and the forward-pion deficit of ccpip_thetapi; no corpus entry isolates coherent production."
+ },
+ {
+  "id": "cccohpip_me_fhc_thetamu",
+  "class": "CCCohPip",
+  "kwargs": {
+   "variable": "thetamu"
+  },
+  "title": "numu CC coherent-like pi+ on CH (mu- + 1 pi+, no nucleons, |t|<0.125 GeV^2, 2<E_nu<20 GeV) dsigma/dthetamu: muon angle theta_mu [deg]",
+  "result": "cccohpip_me_fhc/cccohpip_me_fhc_thetamu_xsec.pkl",
+  "motivation": "Direct test of the v7 coherent pi+ model (Berger-Sehgal PCAC + Rein-Sehgal hadronic input above T_pi=1.7 GeV): mu- + one pi+ and no nucleons at low |t| on CH. The E_pi, theta_pi and E_nu dependence separate an underpredicted high-energy coherent cross section (hypothesis A) from a deficient incoherent low-Q2 DIS (hypothesis B) behind the low-pT/high-pz deficit of ccinc_2d and the forward-pion deficit of ccpip_thetapi; no corpus entry isolates coherent production."
+ }
+]
